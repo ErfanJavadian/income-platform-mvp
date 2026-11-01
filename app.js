@@ -99,13 +99,3 @@ startOver.addEventListener("click",()=>{
  plan.hidden=true;
  document.querySelector("#start").scrollIntoView({behavior:"smooth",block:"start"});
 });
-
-
-// Dismiss the visual intro quickly; it is decorative, not a network-loading claim.
-const pageLoader=document.querySelector("#page-loader");
-if(pageLoader){
- const dismissLoader=()=>window.setTimeout(()=>pageLoader.classList.add("is-hidden"),420);
- if(document.readyState==="complete")dismissLoader();
- else window.addEventListener("load",dismissLoader,{once:true});
- window.setTimeout(()=>pageLoader.classList.add("is-hidden"),1500);
-}
