@@ -74,3 +74,21 @@ footer span:first-child{color:#53634f;font:800 14px Manrope}
  .path-card{padding:19px}.path-card h3{font-size:18px}.path-top{gap:8px}.fit{font-size:9px;padding:5px 8px}.disclaimer{padding:16px;margin-bottom:35px}footer{padding:18px;flex-direction:column;gap:5px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+
+/* Result-card and action-plan components */
+.path-card-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px}
+.path-number{color:#789268;font:800 11px Manrope,sans-serif;letter-spacing:1px}
+.tag{padding:5px 9px;border-radius:30px;background:#f1f3ed;color:#65745f;font-size:10px;font-weight:700}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0}
+.meta-row span{padding:5px 9px;border-radius:7px;background:#f2f4ef;color:#667268;font-size:10px;font-weight:600}
+.path-card h4{margin:16px 0 2px;color:#3e5140;font-size:11px;font-weight:800}
+.path-card .muted{color:#637067}
+.path-card .small-button{width:auto;min-height:43px;margin-top:10px;padding:0 17px}
+.offer-box{margin:17px 0;padding:15px 17px;border:1px solid #e2ead9;border-radius:12px;background:#f5f9f0}
+.offer-box strong{color:#4d6d38;font-size:11px}
+.offer-box p{margin:4px 0 0;color:#566451;font-size:13px}
+.checklist{display:grid;gap:9px;margin:18px 0}
+.task{display:flex;align-items:flex-start;gap:11px;padding:13px 14px;border:1px solid #e5e9e2;border-radius:11px;background:#fbfcf9;color:#455348;font-size:12px;cursor:pointer}
+.task input{flex:0 0 auto;width:16px;height:16px;margin:2px 0 0;accent-color:#78a94e}
+.task:has(input:checked){background:#f2f8eb;border-color:#cfe0bd}
+.action-panel h3{margin:18px 0 5px;font:700 14px Manrope,sans-serif}
