@@ -46,3 +46,41 @@ html.motion-ready .reveal-on-scroll{opacity:0;transform:translateY(15px);transit
 html.motion-ready .reveal-on-scroll.is-visible{opacity:1;transform:translateY(0)}
 @media(prefers-reduced-motion:reduce){.site-loader img,.site-loader i,.hero-content>.eyebrow,.hero-content>h1,.hero-content>.hero-description,.hero-content>.hero-cta-row,.hero-content>.hero-stats,.product-window,.hero-orb{animation:none!important}.brand-logo,.step-card,.path-card,.button,.submit-button,.nav-button,.edit-button{transition:none!important}html.motion-ready .reveal-on-scroll{opacity:1;transform:none;transition:none}}
 @media(max-width:600px){.brand-logo{width:32px;height:32px;flex-basis:32px}.footer .brand-logo{width:28px;height:28px;flex-basis:28px}.hero-orb{width:70px;height:70px}}
+
+
+/* Pathfinder interaction system — visible, lightweight, and touch-friendly */
+:root{--motion-ease:cubic-bezier(.22,.75,.25,1)}
+html{scroll-behavior:smooth}
+.topbar{position:sticky;top:0}
+.hero-product:before{animation:ambient-pulse 8s ease-in-out infinite alternate}
+.hero-orb{animation:orb-drift 8s ease-in-out infinite}
+.floating-note{animation:float-note 5.5s ease-in-out infinite}
+.brand-logo{transition:transform .35s var(--motion-ease),filter .35s var(--motion-ease)}
+.button,.nav-button,.submit-button,.primary-button,.secondary-button,.edit-button{position:relative;overflow:hidden;isolation:isolate;will-change:transform}
+.button:active,.nav-button:active,.submit-button:active,.primary-button:active,.secondary-button:active,.edit-button:active{transform:scale(.975)}
+.button::after,.nav-button::after,.submit-button::after,.primary-button::after,.secondary-button::after,.edit-button::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 20%,rgba(255,255,255,.24) 48%,transparent 76%);transform:translateX(-130%);transition:transform .65s var(--motion-ease);z-index:-1}
+.button:hover::after,.nav-button:hover::after,.submit-button:hover::after,.primary-button:hover::after,.secondary-button:hover::after,.edit-button:hover::after{transform:translateX(130%)}
+.form-card,.product-window,.step-card,.path-card,.action-panel,.expectations{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.form-card{background:rgba(255,255,255,.94)}
+.step-card,.path-card{transition:transform .32s var(--motion-ease),box-shadow .32s var(--motion-ease),border-color .32s var(--motion-ease)}
+.step-card:hover,.path-card:hover{transform:translateY(-6px) scale(1.008);border-color:#d9d6ff;box-shadow:0 22px 50px rgba(29,42,84,.12)}
+.field input:focus,.field select:focus{outline:none;border-color:#8b83ed;box-shadow:0 0 0 4px rgba(99,91,223,.12);transition:box-shadow .2s,border-color .2s}
+.skill-option span{transition:background .2s,border-color .2s,transform .2s}
+.skill-option:active span{transform:scale(.97)}
+.site-loader{transition:opacity .55s var(--motion-ease),visibility .55s}
+.site-loader.is-hidden{opacity:0;visibility:hidden}
+html.motion-ready .reveal-on-scroll{opacity:0;transform:translateY(26px);filter:blur(5px);transition:opacity .7s var(--motion-ease),transform .7s var(--motion-ease),filter .7s var(--motion-ease)}
+html.motion-ready .reveal-on-scroll.is-visible{opacity:1;transform:translateY(0);filter:blur(0)}
+html.motion-ready .reveal-child{opacity:0;transform:translateY(18px);transition:opacity .58s var(--motion-ease),transform .58s var(--motion-ease);transition-delay:var(--reveal-delay,0ms)}
+html.motion-ready .is-visible .reveal-child{opacity:1;transform:translateY(0)}
+.path-card{animation:card-pop .55s var(--motion-ease) both}
+.path-card:nth-child(2){animation-delay:.09s}.path-card:nth-child(3){animation-delay:.18s}
+.action-panel{animation:panel-enter .55s var(--motion-ease) both}
+.ripple-dot{position:absolute;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.45);pointer-events:none;transform:translate(-50%,-50%) scale(0);animation:ripple-spread .55s ease-out forwards;z-index:2}
+@keyframes ambient-pulse{from{transform:scale(.96);opacity:.72}to{transform:scale(1.06);opacity:1}}
+@keyframes float-note{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes card-pop{from{opacity:0;transform:translateY(22px) scale(.985);filter:blur(4px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes panel-enter{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ripple-spread{to{transform:translate(-50%,-50%) scale(22);opacity:0}}
+@media(max-width:600px){.floating-note{animation:none}.hero-product:before{animation-duration:12s}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero-product:before,.hero-orb,.floating-note,.path-card,.action-panel{animation:none!important}html.motion-ready .reveal-on-scroll,html.motion-ready .reveal-child{opacity:1;transform:none;filter:none;transition:none!important}.ripple-dot{display:none}}
