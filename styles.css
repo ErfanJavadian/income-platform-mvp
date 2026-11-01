@@ -84,3 +84,50 @@ html.motion-ready .is-visible .reveal-child{opacity:1;transform:translateY(0)}
 @keyframes ripple-spread{to{transform:translate(-50%,-50%) scale(22);opacity:0}}
 @media(max-width:600px){.floating-note{animation:none}.hero-product:before{animation-duration:12s}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero-product:before,.hero-orb,.floating-note,.path-card,.action-panel{animation:none!important}html.motion-ready .reveal-on-scroll,html.motion-ready .reveal-child{opacity:1;transform:none;filter:none;transition:none!important}.ripple-dot{display:none}}
+
+/* Focused brand + loading motion only. No other page elements are changed. */
+.brand-logo{
+  transform-style:preserve-3d;
+  backface-visibility:visible;
+  animation:pathfinder-logo-3d 5.2s ease-in-out infinite;
+  will-change:transform,filter;
+}
+.brand:hover .brand-logo{
+  animation-play-state:paused;
+  transform:perspective(700px) rotateX(-9deg) rotateY(18deg) translateY(-2px);
+  filter:drop-shadow(0 9px 10px rgba(81,72,200,.3));
+}
+.site-loader{perspective:900px}
+.site-loader::before{
+  content:"";
+  position:absolute;
+  width:78px;
+  height:78px;
+  border:1px solid rgba(99,91,223,.14);
+  border-top-color:#635bdf;
+  border-right-color:#b9b4ff;
+  border-radius:50%;
+  animation:pathfinder-loader-ring 1.15s linear infinite;
+}
+.site-loader img{
+  position:relative;
+  z-index:1;
+  animation:pathfinder-loader-logo 2.4s ease-in-out infinite;
+  transform-style:preserve-3d;
+  backface-visibility:visible;
+}
+@keyframes pathfinder-logo-3d{
+  0%,100%{transform:perspective(700px) rotateX(0deg) rotateY(-8deg) translateY(0) scale(1)}
+  25%{transform:perspective(700px) rotateX(8deg) rotateY(0deg) translateY(-2px) scale(1.025)}
+  50%{transform:perspective(700px) rotateX(0deg) rotateY(12deg) translateY(0) scale(1)}
+  75%{transform:perspective(700px) rotateX(-7deg) rotateY(0deg) translateY(-2px) scale(1.025)}
+}
+@keyframes pathfinder-loader-logo{
+  0%,100%{transform:perspective(900px) rotateY(-14deg) rotateX(7deg) scale(.94)}
+  50%{transform:perspective(900px) rotateY(14deg) rotateX(-7deg) scale(1.04)}
+}
+@keyframes pathfinder-loader-ring{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){
+  .brand-logo,.site-loader img,.site-loader::before{animation:none!important}
+  .brand:hover .brand-logo{transform:none}
+}
