@@ -105,8 +105,8 @@ startOver.addEventListener("click",()=>{
 (()=>{
  const loader=document.getElementById("site-loader");
  const finishLoading=()=>{if(loader)loader.classList.add("is-hidden");};
- window.addEventListener("load",()=>window.setTimeout(finishLoading,420),{once:true});
- window.setTimeout(finishLoading,1800);
+ window.addEventListener("load",()=>window.setTimeout(finishLoading,900),{once:true});
+ window.setTimeout(finishLoading,2800);
  const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
  if(reduceMotion)return;
  const revealTargets=document.querySelectorAll(".section-heading,.step-card,.start-intro,.form-card,.expectations");
@@ -119,4 +119,52 @@ startOver.addEventListener("click",()=>{
   });
  },{threshold:.12,rootMargin:"0px 0px -24px 0px"});
  revealTargets.forEach(node=>observer.observe(node));
+})();
+
+
+// Consistent reveal choreography and tactile button feedback (kept separate from matching logic).
+(()=> {
+ const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ const revealGroups=[
+  ...document.querySelectorAll(".hero-content,.hero-product,.section-heading,.step-card,.start-intro,.form-card,.expectations,.footer")
+ ];
+ const staggerGroups=[...document.querySelectorAll(".steps-grid,.reassurance-list,.form-grid,.skill-options")];
+ staggerGroups.forEach(group=>[...group.children].forEach((child,index)=>{
+  child.classList.add("reveal-child");
+  child.style.setProperty("--reveal-delay",(Math.min(index,6)*75)+"ms");
+ }));
+ if(!reduce){
+  document.documentElement.classList.add("motion-ready");
+  revealGroups.forEach(node=>node.classList.add("reveal-on-scroll"));
+  if("IntersectionObserver" in window){
+   const io=new IntersectionObserver(entries=>entries.forEach(entry=>{
+    if(entry.isIntersecting){entry.target.classList.add("is-visible");io.unobserve(entry.target);}
+   }),{threshold:.08,rootMargin:"0px 0px -35px 0px"});
+   revealGroups.forEach(node=>io.observe(node));
+  }else revealGroups.forEach(node=>node.classList.add("is-visible"));
+ }
+ document.addEventListener("click",event=>{
+  const button=event.target.closest("button,a.button,a.nav-button");
+  if(!button||reduce)return;
+  const rect=button.getBoundingClientRect();
+  const dot=document.createElement("span");
+  dot.className="ripple-dot";
+  dot.style.left=(event.clientX?event.clientX-rect.left:rect.width/2)+"px";
+  dot.style.top=(event.clientY?event.clientY-rect.top:rect.height/2)+"px";
+  button.append(dot);
+  window.setTimeout(()=>dot.remove(),650);
+ });
+ const formEl=document.querySelector("#profile-form");
+ if(formEl){
+  formEl.addEventListener("submit",()=>{
+   window.setTimeout(()=>{
+    const result=document.querySelector("#results");
+    if(result&&!result.hidden){
+     result.classList.remove("result-refresh");
+     void result.offsetWidth;
+     result.classList.add("result-refresh");
+    }
+   },40);
+  });
+ }
 })();
