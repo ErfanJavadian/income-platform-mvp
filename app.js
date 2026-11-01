@@ -1,108 +1,101 @@
-const form = document.querySelector("#profile-form");
-const results = document.querySelector("#results");
-const cards = document.querySelector("#path-cards");
-const plan = document.querySelector("#action-plan");
-const startOver = document.querySelector("#start-over");
+const form=document.querySelector("#profile-form");
+const results=document.querySelector("#results");
+const cards=document.querySelector("#path-cards");
+const plan=document.querySelector("#action-plan");
+const startOver=document.querySelector("#start-over");
+const skillInputs=[...document.querySelectorAll('input[name="skills"]')];
 
-const paths = [
-  {id:"assistant",name:"Virtual assistant",tag:"Service business",desc:"Help a solo founder or small business with simple, repeatable admin tasks.",offer:"A 2-hour starter support package: inbox sorting, spreadsheet cleanup, or appointment research.",skills:["Organization","Communication","Research"],interests:["Helping businesses","Anything practical"],difficulty:"Beginner-friendly",cost:"Can start at $0",time:"Try a 7-day customer search",tasks:["Choose one small task you can reliably do.","Create a one-page sample using fictional data.","Find 10 small businesses or independent professionals.","Send 5 thoughtful, personal messages offering a specific result.","Ask for feedback; offer a small paid pilot only if they are interested."],tools:["Google Docs or Sheets","Canva free plan","Email or business social profiles"]},
-  {id:"content",name:"Short-form content support",tag:"Creative service",desc:"Help a local business turn its existing ideas, FAQs, or products into useful social posts.",offer:"A starter pack of 3 caption ideas and 2 simple post designs for one business.",skills:["Writing","Design","Video editing"],interests:["Content and social media","Helping businesses"],difficulty:"Beginner to intermediate",cost:"Can start at $0",time:"Try a 7-day sample-and-outreach sprint",tasks:["Pick one business category you understand.","Create 2 sample posts for a fictional business.","Put the samples in a simple shareable folder.","Contact 5 relevant businesses with one useful observation.","Ask whether they would like a small trial pack; agree on scope before doing paid work."],tools:["Canva free plan","Google Docs","A phone camera"]},
-  {id:"research",name:"Online research service",tag:"Research service",desc:"Collect and organize useful public information for creators, job seekers, or small teams.",offer:"A clearly scoped research list, such as 20 relevant podcast guests or competitor examples.",skills:["Research","Writing","Organization"],interests:["Research and information","Helping businesses","Anything practical"],difficulty:"Beginner-friendly",cost:"Can start at $0",time:"Try a 5-day portfolio sprint",tasks:["Choose one research topic and audience.","Build a sample list with 10 entries and source links.","Explain what makes the list useful and how you checked it.","Find 5 people or businesses who might need that information.","Share the sample and ask what would make it more useful."],tools:["Google Search","Google Sheets","Google Docs"]},
-  {id:"digital",name:"Simple digital resources",tag:"Digital product",desc:"Create a focused checklist, template, or tracker that solves one small problem.",offer:"A practical checklist or editable planner for a clearly defined audience.",skills:["Writing","Design","Organization"],interests:["Digital products","Content and social media"],difficulty:"Intermediate: distribution is the hard part",cost:"Can prototype at $0",time:"Validate demand before building",tasks:["Choose one specific problem you have seen more than once.","Talk to 5 people in the target audience before creating anything.","Draft a one-page solution in a free document tool.","Show the draft and ask what is missing.","Only consider selling after people show real interest; check platform fees and local rules."],tools:["Google Docs","Canva free plan","A relevant online community"]},
-  {id:"tutoring",name:"Beginner tutoring or practice",tag:"Knowledge service",desc:"Help someone practise a subject or language you genuinely know well.",offer:"A 30-minute beginner practice session with a clear learning outcome.",skills:["Communication","Writing"],interests:["Teaching and explaining"],difficulty:"Depends on your subject knowledge",cost:"Can start at $0",time:"Validate with a small pilot",tasks:["Choose a subject you can teach accurately.","Define one beginner-level outcome for a short session.","Prepare a simple lesson and practice exercise.","Ask 3–5 people in relevant communities what support they need.","Offer a short introductory session and request honest feedback."],tools:["Google Meet or another free call option","Google Docs","A simple practice worksheet"]}
+const paths=[
+{id:"content",name:"Short-form content support",tag:"Creative service",desc:"Help a small business turn its existing ideas, products and FAQs into useful social posts.",offer:"A starter pack of 3 caption ideas and 2 simple post designs for one clearly defined business.",skills:["Writing","Design","Video editing"],interests:["Content and social media","Helping businesses"],difficulty:"Beginner to intermediate",cost:"Can start at $0",time:"7-day sample-and-outreach sprint",tasks:["Choose one type of business you understand (for example, cafés or local shops).","Create two sample posts for a fictional business. Do not use another business’s content without permission.","Put your samples in a simple shareable folder and write one sentence about the result you offer.","Find five relevant businesses and note one genuine improvement idea for each.","Send a short, personal message with one sample. Ask if they would like to discuss a small paid trial; agree on scope before doing the work."],tools:["Canva free plan","Google Docs","Your phone"]},
+{id:"research",name:"Online research service",tag:"Research service",desc:"Collect and organise useful public information for creators, job seekers or small teams.",offer:"A focused, well-sourced research list — for example, 20 relevant podcast guests or competitor examples.",skills:["Research","Writing","Organization"],interests:["Research and information","Helping businesses","Anything practical"],difficulty:"Beginner-friendly",cost:"Can start at $0",time:"5-day sample portfolio sprint",tasks:["Choose one audience and a specific question they need answered.","Create a sample list of 10 entries with working source links and a clear structure.","Check the accuracy of every entry and explain why the information is useful.","Find five people or businesses who might need this kind of research.","Share the sample and ask what would make it more useful before offering a paid, clearly scoped project."],tools:["Google Search","Google Sheets","Google Docs"]},
+{id:"assistant",name:"Virtual assistant",tag:"Support service",desc:"Help an independent professional or small business with simple, repeatable admin tasks.",offer:"A small starter package such as spreadsheet cleanup, public-information research or organising a task list.",skills:["Organization","Communication","Research"],interests:["Helping businesses","Anything practical"],difficulty:"Beginner-friendly",cost:"Can start at $0",time:"7-day customer discovery sprint",tasks:["Choose one task you can do reliably and describe its outcome in one sentence.","Create a sample using fictional information — never use private customer data.","Make a list of 10 small businesses or independent professionals who may need help.","Send five thoughtful messages that mention a specific, relevant task you can take off their plate.","Ask for feedback and offer a small paid pilot only if they express interest. Agree on scope and access permissions first."],tools:["Google Docs or Sheets","Email","A phone"]},
+{id:"digital",name:"Simple digital resources",tag:"Digital product",desc:"Create a focused checklist, template or tracker that solves one small problem for a defined audience.",offer:"A practical one-page checklist or editable planner designed around one specific user problem.",skills:["Writing","Design","Organization"],interests:["Digital products","Content and social media"],difficulty:"Intermediate: distribution takes work",cost:"Prototype at $0",time:"Validate demand before building",tasks:["Identify one recurring problem for a specific group of people.","Talk to five people in that audience before creating the product.","Draft a one-page solution using a free document tool.","Show the draft and ask what is confusing or missing.","Only consider selling after you see real interest; check platform fees, payout access and local rules first."],tools:["Google Docs","Canva free plan","Relevant online communities"]},
+{id:"tutoring",name:"Beginner tutoring or practice",tag:"Knowledge service",desc:"Help someone practise a subject or language you genuinely know well.",offer:"A 30-minute beginner practice session with one clear learning outcome.",skills:["Communication","Writing"],interests:["Teaching and explaining"],difficulty:"Depends on subject knowledge",cost:"Can start at $0",time:"Validate with a small pilot",tasks:["Choose a subject you can teach accurately and confidently.","Define one achievable outcome for a short beginner session.","Prepare a simple lesson and a practice exercise.","Ask three to five people in a relevant community what support they need.","Offer a short introductory session and request honest feedback."],tools:["A free video-call option","Google Docs","A simple worksheet"]}
 ];
 
-function scorePath(path, profile) {
-  let score = 0;
-  if (profile.skills.some(skill => path.skills.includes(skill))) score += 3;
-  if (path.interests.includes(profile.interest)) score += 3;
-  if (profile.experience === "Beginner" && path.difficulty.includes("Beginner")) score += 2;
-  if (profile.device === "Phone" && ["content","research","assistant"].includes(path.id)) score += 1;
-  if (Number(profile.hours) >= 2) score += 1;
-  if (profile.skills.includes("None yet") && path.id === "research") score += 1;
-  return score;
+function syncNoneChoice(event){
+ const selected=event.target;
+ if(selected.value==="None yet"&&selected.checked){skillInputs.forEach(input=>{if(input!==selected)input.checked=false;});}
+ if(selected.value!=="None yet"&&selected.checked){const none=skillInputs.find(input=>input.value==="None yet");if(none)none.checked=false;}
 }
+skillInputs.forEach(input=>input.addEventListener("change",syncNoneChoice));
 
-function getProfile() {
-  const data = new FormData(form);
-  return {
-    country: data.get("country").trim(),
-    language: data.get("language"),
-    skills: data.getAll("skills"),
-    interest: data.get("interest"),
-    hours: data.get("hours"),
-    experience: data.get("experience"),
-    device: data.get("device"),
-    budget: data.get("budget"),
-    goal: data.get("goal")
-  };
+function getProfile(){
+ const data=new FormData(form);
+ return {country:String(data.get("country")||"").trim(),language:data.get("language"),skills:data.getAll("skills"),interest:data.get("interest"),hours:data.get("hours"),experience:data.get("experience"),device:data.get("device"),budget:data.get("budget"),goal:data.get("goal")};
 }
-
-function renderPath(path, index) {
-  const article = document.createElement("article");
-  article.className = "path-card";
-  const title = document.createElement("div");
-  title.className = "path-card-top";
-  title.innerHTML = '<span class="path-number">0' + (index + 1) + '</span><span class="tag"></span>';
-  title.querySelector(".tag").textContent = path.tag;
-  const heading = document.createElement("h3");
-  heading.textContent = path.name;
-  const desc = document.createElement("p");
-  desc.className = "muted";
-  desc.textContent = path.desc;
-  const meta = document.createElement("div");
-  meta.className = "meta-row";
-  [path.difficulty, path.cost, path.time].forEach(text => {
-    const item = document.createElement("span"); item.textContent = text; meta.append(item);
-  });
-  const offerTitle = document.createElement("h4"); offerTitle.textContent = "A first offer to test";
-  const offer = document.createElement("p"); offer.textContent = path.offer;
-  const button = document.createElement("button");
-  button.className = index === 0 ? "primary-button small-button" : "secondary-button";
-  button.type = "button"; button.textContent = "Build my action plan";
-  button.addEventListener("click", () => showPlan(path));
-  article.append(title, heading, desc, meta, offerTitle, offer, button);
-  return article;
+function scorePath(path,profile){
+ let score=0;
+ const skillMatches=profile.skills.filter(skill=>skill!=="None yet"&&path.skills.includes(skill)).length;
+ score+=Math.min(skillMatches,2)*3;
+ if(path.interests.includes(profile.interest))score+=3;
+ if(profile.experience==="Beginner"&&path.difficulty.toLowerCase().includes("beginner"))score+=2;
+ if(profile.device==="Phone"&&["content","research","assistant"].includes(path.id))score+=2;
+ if(Number(profile.hours)>=2)score+=1;
+ if(profile.budget==="0"&&path.cost.toLowerCase().includes("$0"))score+=1;
+ if(profile.skills.includes("None yet")&&["research","assistant"].includes(path.id))score+=1;
+ return score;
 }
-
-function showPlan(path) {
-  plan.hidden = false;
-  plan.innerHTML = "";
-  const eyebrow = document.createElement("p"); eyebrow.className = "eyebrow"; eyebrow.textContent = "YOUR FIRST-CUSTOMER PLAN";
-  const heading = document.createElement("h2"); heading.textContent = path.name;
-  const intro = document.createElement("p"); intro.className = "muted"; intro.textContent = "Keep the first test small. The goal is to learn whether someone needs this—not to build a perfect business.";
-  const offer = document.createElement("div"); offer.className = "offer-box";
-  const strong = document.createElement("strong"); strong.textContent = "Your starter offer";
-  const offerText = document.createElement("p"); offerText.textContent = path.offer; offer.append(strong, offerText);
-  const list = document.createElement("div"); list.className = "checklist";
-  path.tasks.forEach((task, i) => {
-    const label = document.createElement("label"); label.className = "task";
-    const input = document.createElement("input"); input.type = "checkbox"; input.dataset.task = path.id + "-" + i;
-    input.checked = localStorage.getItem("pathfinder-" + input.dataset.task) === "true";
-    input.addEventListener("change", () => localStorage.setItem("pathfinder-" + input.dataset.task, String(input.checked)));
-    const span = document.createElement("span"); span.textContent = task;
-    label.append(input, span); list.append(label);
-  });
-  const toolsTitle = document.createElement("h3"); toolsTitle.textContent = "Free tools to consider";
-  const tools = document.createElement("p"); tools.className = "muted"; tools.textContent = path.tools.join(" · ");
-  plan.append(eyebrow, heading, intro, offer, list, toolsTitle, tools);
-  plan.scrollIntoView({behavior:"smooth",block:"start"});
+function make(tag,className,text){
+ const node=document.createElement(tag);
+ if(className)node.className=className;
+ if(text!==undefined)node.textContent=text;
+ return node;
 }
-
-form.addEventListener("submit", event => {
-  event.preventDefault();
-  if (!form.reportValidity()) return;
-  const profile = getProfile();
-  const ranked = [...paths].map(path => ({path,score:scorePath(path,profile)})).sort((a,b)=>b.score-a.score).slice(0,3);
-  cards.innerHTML = "";
-  ranked.forEach((item,index)=>cards.append(renderPath(item.path,index)));
-  plan.hidden = true;
-  results.hidden = false;
-  results.scrollIntoView({behavior:"smooth",block:"start"});
+function renderPath(path,index){
+ const article=make("article","path-card");
+ const top=make("div","path-card-top");
+ top.append(make("span","path-number","0"+(index+1)),make("span","tag",index===0?"BEST STARTING MATCH":path.tag));
+ const heading=make("h3","",path.name);
+ const desc=make("p","",path.desc);
+ const offerTitle=make("h4","","A first offer to test");
+ const offer=make("p","",path.offer);
+ const meta=make("div","meta-row");
+ [path.difficulty,path.cost,path.time].forEach(value=>meta.append(make("span","",value)));
+ const button=make("button",index===0?"primary-button":"secondary-button","Build my action plan");
+ button.type="button";
+ button.addEventListener("click",()=>showPlan(path,button));
+ article.append(top,heading,desc,offerTitle,offer,meta,button);
+ return article;
+}
+function showPlan(path,sourceButton){
+ plan.hidden=false;
+ plan.replaceChildren();
+ const eyebrow=make("div","eyebrow","YOUR FIRST-CUSTOMER PLAN");
+ const heading=make("h2","",path.name);
+ const intro=make("p","","Keep the first experiment small. The goal is to learn whether someone needs this — not to build a perfect business.");
+ const offer=make("div","offer-box");
+ offer.append(make("strong","","YOUR STARTER OFFER"),make("p","",path.offer));
+ const list=make("div","checklist");
+ path.tasks.forEach((task,index)=>{
+  const label=make("label","task");
+  const input=document.createElement("input");
+  input.type="checkbox";
+  input.dataset.task=path.id+"-"+index;
+  const key="pathfinder-"+input.dataset.task;
+  try{input.checked=localStorage.getItem(key)==="true";}catch(error){}
+  input.addEventListener("change",()=>{try{localStorage.setItem(key,String(input.checked));}catch(error){}});
+  label.append(input,make("span","",task));
+  list.append(label);
+ });
+ const toolsTitle=make("h3","","Free tools to consider");
+ const tools=make("p","",path.tools.join(" · "));
+ const closeNote=make("p","plan-note","Before contacting anyone, respect their privacy, follow platform rules and agree clearly on the work and payment terms.");
+ plan.append(eyebrow,heading,intro,offer,list,toolsTitle,tools,closeNote);
+ plan.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+}
+form.addEventListener("submit",event=>{
+ event.preventDefault();
+ if(!form.reportValidity())return;
+ const profile=getProfile();
+ const ranked=paths.map((path,originalIndex)=>({path,score:scorePath(path,profile),originalIndex})).sort((a,b)=>b.score-a.score||a.originalIndex-b.originalIndex).slice(0,3);
+ cards.replaceChildren(...ranked.map((item,index)=>renderPath(item.path,index)));
+ plan.hidden=true;
+ results.hidden=false;
+ results.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
 });
-
-startOver.addEventListener("click", () => {
-  results.hidden = true;
-  plan.hidden = true;
-  form.scrollIntoView({behavior:"smooth",block:"start"});
+startOver.addEventListener("click",()=>{
+ results.hidden=true;
+ plan.hidden=true;
+ document.querySelector("#start").scrollIntoView({behavior:"smooth",block:"start"});
 });
