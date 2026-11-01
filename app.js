@@ -99,3 +99,24 @@ startOver.addEventListener("click",()=>{
  plan.hidden=true;
  document.querySelector("#start").scrollIntoView({behavior:"smooth",block:"start"});
 });
+
+
+// Visual enhancements are intentionally isolated from the product logic.
+(()=>{
+ const loader=document.getElementById("site-loader");
+ const finishLoading=()=>{if(loader)loader.classList.add("is-hidden");};
+ window.addEventListener("load",()=>window.setTimeout(finishLoading,420),{once:true});
+ window.setTimeout(finishLoading,1800);
+ const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ if(reduceMotion)return;
+ const revealTargets=document.querySelectorAll(".section-heading,.step-card,.start-intro,.form-card,.expectations");
+ if(!("IntersectionObserver" in window)){revealTargets.forEach(node=>node.classList.add("is-visible"));return;}
+ document.documentElement.classList.add("motion-ready");
+ revealTargets.forEach(node=>node.classList.add("reveal-on-scroll"));
+ const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+   if(entry.isIntersecting){entry.target.classList.add("is-visible");observer.unobserve(entry.target);}
+  });
+ },{threshold:.12,rootMargin:"0px 0px -24px 0px"});
+ revealTargets.forEach(node=>observer.observe(node));
+})();
