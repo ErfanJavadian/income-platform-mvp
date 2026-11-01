@@ -1,66 +1,89 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101827">
-  <meta name="description" content="Find a realistic online income path and a practical plan to reach your first customer.">
-  <title>Pathfinder — Find Your First Online Customer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <script src="app.js" defer></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f4f2eb">
+<meta name="description" content="Find a realistic online income path. Build a practical plan to reach your first customer.">
+<title>Pathfinder — Make your next move</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css"><script src="app.js" defer></script>
 </head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="#" aria-label="Pathfinder home"><span class="brand-mark">P</span><span>pathfinder<span class="brand-dot">.</span></span></a>
-    <span class="header-note">A practical start for your next step</span>
-  </header>
-  <main class="container">
-    <section class="hero">
-      <p class="eyebrow">YOUR FIRST STEP STARTS HERE</p>
-      <h1>Find a realistic way to earn <span>online.</span></h1>
-      <p class="hero-copy">Tell us what you have. Get three ideas that fit your situation and a simple plan to find your first customer.</p>
-      <div class="trust-row"><span>✓ No payment required</span><span>✓ Beginner-friendly</span><span>✓ Action over hype</span></div>
-    </section>
-
-    <section class="panel form-panel" aria-labelledby="form-title">
-      <div class="section-heading"><div><p class="eyebrow">LET'S GET PRACTICAL</p><h2 id="form-title">Your starting point</h2></div><span class="step-badge">01 / 02</span></div>
-      <form id="profile-form">
-        <div class="field-grid">
-          <label class="field"><span>Where are you based?</span><input name="country" placeholder="e.g. Germany" autocomplete="country-name" required></label>
-          <label class="field"><span>What language can you work in?</span><select name="language"><option value="English">English</option><option value="Persian">Persian</option><option value="Both English and Persian">Both English and Persian</option><option value="Other">Other</option></select></label>
-          <label class="field full"><span>What skills do you already have?</span><div class="choice-grid">
-            <label class="choice"><input type="checkbox" name="skills" value="Writing"><span>Writing</span></label>
-            <label class="choice"><input type="checkbox" name="skills" value="Design"><span>Design</span></label>
-            <label class="choice"><input type="checkbox" name="skills" value="Video editing"><span>Video editing</span></label>
-            <label class="choice"><input type="checkbox" name="skills" value="Research"><span>Research</span></label>
-            <label class="choice"><input type="checkbox" name="skills" value="Communication"><span>Communication</span></label>
-            <label class="choice"><input type="checkbox" name="skills" value="Organization"><span>Organization</span></label>
-            <label class="choice"><input type="checkbox" name="skills" value="None yet"><span>None yet</span></label>
-          </div></label>
-          <label class="field"><span>What are you interested in?</span><select name="interest"><option value="Content and social media">Content and social media</option><option value="Helping businesses">Helping businesses</option><option value="Research and information">Research and information</option><option value="Digital products">Digital products</option><option value="Teaching and explaining">Teaching and explaining</option><option value="Anything practical">Anything practical</option></select></label>
-          <label class="field"><span>Time available per day</span><select name="hours"><option value="1">About 1 hour</option><option value="2" selected>About 2 hours</option><option value="3">About 3 hours</option><option value="4">4+ hours</option></select></label>
-          <label class="field"><span>Your experience</span><select name="experience"><option value="Beginner">Complete beginner</option><option value="Some experience">Some experience</option><option value="Experienced">Experienced</option></select></label>
-          <label class="field"><span>What device can you use?</span><select name="device"><option value="Phone">Android / iPhone only</option><option value="Computer">Computer or laptop</option><option value="Both">Both phone and computer</option></select></label>
-          <label class="field"><span>Starting budget</span><select name="budget"><option value="0" selected>$0 — no budget</option><option value="25">Up to $25</option><option value="100">$25–$100</option></select></label>
-          <label class="field full"><span>What is your first goal?</span><select name="goal"><option value="Find my first customer">Find my first customer</option><option value="Earn my first $100">Earn my first $100</option><option value="Build a small side income">Build a small side income</option><option value="Explore my options">Explore my options</option></select></label>
-        </div>
-        <button class="primary-button" type="submit">Find my 3 paths <span aria-hidden="true">→</span></button>
-        <p class="form-footnote">Your answers stay in this browser. No account needed.</p>
-      </form>
-    </section>
-
-    <section id="results" class="results-section" hidden aria-live="polite">
-      <div class="section-heading"><div><p class="eyebrow">YOUR PERSONAL SHORTLIST</p><h2>Three paths to explore</h2><p class="muted">Start with one. Test it with real people before investing time or money.</p></div><span class="step-badge">02 / 02</span></div>
-      <div id="path-cards" class="path-grid"></div>
-      <div id="action-plan" class="panel action-panel" hidden></div>
-      <button id="start-over" class="secondary-button" type="button">Edit my answers</button>
-    </section>
-
-    <section class="disclaimer"><strong>A note about expectations</strong><p>This is an early, rule-based prototype—not an AI agent or a promise of income. Suggestions are starting hypotheses. Results depend on your skills, market, effort and customer demand. Never pay for a course or tool just because a suggestion mentions it.</p></section>
-  </main>
-  <footer><span>pathfinder.</span><span>Build skills. Talk to customers. Improve with evidence.</span></footer>
-</body>
-</html>
+<header class="site-header">
+ <a class="brand" href="#" aria-label="Pathfinder home"><span class="brand-symbol">P<span>↗</span></span><span>pathfinder<span class="brand-period">.</span></span></a>
+ <nav class="header-nav"><a href="#how-it-works">How it works</a><a href="#start">Find your path</a></nav>
+ <a class="header-cta" href="#start">Get started <span>↗</span></a>
+</header>
+<main>
+<section class="hero wrap">
+ <div class="hero-copy">
+  <div class="kicker"><span class="live-dot"></span> YOUR NEXT MOVE STARTS HERE</div>
+  <h1>Turn what you have<br>into <em>what’s next.</em></h1>
+  <p class="hero-lede">A clearer way to start earning online. Find a path that fits your skills, your time and your reality — then take the first step.</p>
+  <div class="hero-actions"><a class="btn btn-dark" href="#start">Find my starting point <span>↗</span></a><span class="no-hype">No fees. No get-rich-quick promises.</span></div>
+  <div class="hero-proof"><div class="proof-item"><b>01</b><span>Know your options</span></div><div class="proof-item"><b>02</b><span>Choose one direction</span></div><div class="proof-item"><b>03</b><span>Find your first customer</span></div></div>
+ </div>
+ <div class="hero-visual" aria-label="Preview of a Pathfinder recommendation">
+  <div class="visual-top"><span>PATHFINDER / FIELD NOTES</span><span>NO. 001</span></div>
+  <div class="visual-label">A GOOD PLACE TO BEGIN</div>
+  <div class="visual-title">Your next move<br>is closer than<br><i>you think.</i></div>
+  <div class="mini-result">
+   <div class="mini-result-head"><span class="mini-icon">✳</span><span>YOUR MATCH</span><span class="match-tag">POTENTIAL FIT</span></div>
+   <strong>Content support</strong><p>Turn everyday business ideas into useful social posts.</p>
+   <div class="mini-chips"><span>Phone-friendly</span><span>Start at $0</span></div>
+  </div>
+  <div class="visual-foot"><span>LESS GUESSING. MORE DOING.</span><span>↗</span></div>
+  <div class="visual-stamp">MAKE<br>IT<br>REAL.</div>
+ </div>
+</section>
+<section class="how wrap" id="how-it-works">
+ <div class="section-intro"><span class="eyebrow">A SIMPLE WAY FORWARD</span><h2>From “where do I start?”<br>to <span>one clear next step.</span></h2></div>
+ <div class="how-grid">
+  <article><span class="how-num">01 / TELL US</span><h3>Start with your reality.</h3><p>Your skills, interests, time and tools. No perfect résumé required.</p></article>
+  <article><span class="how-num">02 / EXPLORE</span><h3>See three possible paths.</h3><p>Get practical ideas matched to your starting point — not a fantasy list.</p></article>
+  <article><span class="how-num">03 / TAKE ACTION</span><h3>Make a first-customer plan.</h3><p>Choose one small experiment and learn from real people.</p></article>
+ </div>
+</section>
+<section class="start-section" id="start">
+ <div class="wrap start-wrap">
+  <div class="start-aside"><span class="eyebrow">YOUR STARTING POINT</span><h2>Let’s find<br>your <em>first move.</em></h2><p>Answer a few quick questions. We’ll use them to build a shortlist that fits your situation.</p><div class="aside-note"><span>✳</span><div><b>Built for real life.</b><small>Beginner-friendly. Phone-friendly. Start with what you have.</small></div></div><div class="aside-index">PATHFINDER <span>— 001</span></div></div>
+  <div class="form-shell">
+   <div class="form-top"><div><span class="eyebrow">PERSONALISE YOUR PATH</span><h3>Tell us a little about you</h3></div><span class="step-indicator">01 <i>—</i> 02</span></div>
+   <form id="profile-form">
+    <div class="form-section"><div class="form-section-head"><span>01</span><div><b>Your world</b><small>Where you are and what you enjoy</small></div></div>
+     <div class="field-grid">
+      <label class="field"><span>Where are you based?</span><input name="country" placeholder="e.g. Iran" autocomplete="country-name" required></label>
+      <label class="field"><span>What language can you work in?</span><select name="language"><option value="English">English</option><option value="Persian">Persian</option><option value="Both English and Persian">English + Persian</option><option value="Other">Other</option></select></label>
+      <label class="field full"><span>What are you interested in?</span><select name="interest"><option value="Content and social media">Content and social media</option><option value="Helping businesses">Helping businesses</option><option value="Research and information">Research and information</option><option value="Digital products">Digital products</option><option value="Teaching and explaining">Teaching and explaining</option><option value="Anything practical">Anything practical</option></select></label>
+     </div>
+    </div>
+    <div class="form-section"><div class="form-section-head"><span>02</span><div><b>Your toolkit</b><small>Skills, time and tools you can use</small></div></div>
+     <div class="field-grid">
+      <fieldset class="field full"><legend>What skills do you already have?</legend><div class="choice-grid">
+       <label class="choice"><input type="checkbox" name="skills" value="Writing"><span>Writing</span></label><label class="choice"><input type="checkbox" name="skills" value="Design"><span>Design</span></label><label class="choice"><input type="checkbox" name="skills" value="Video editing"><span>Video editing</span></label><label class="choice"><input type="checkbox" name="skills" value="Research"><span>Research</span></label><label class="choice"><input type="checkbox" name="skills" value="Communication"><span>Communication</span></label><label class="choice"><input type="checkbox" name="skills" value="Organization"><span>Organization</span></label><label class="choice"><input type="checkbox" name="skills" value="None yet"><span>None yet</span></label>
+      </div></fieldset>
+      <label class="field"><span>Time available per day</span><select name="hours"><option value="1">About 1 hour</option><option value="2" selected>About 2 hours</option><option value="3">About 3 hours</option><option value="4">4+ hours</option></select></label>
+      <label class="field"><span>Your experience</span><select name="experience"><option value="Beginner">Complete beginner</option><option value="Some experience">Some experience</option><option value="Experienced">Experienced</option></select></label>
+      <label class="field"><span>What device can you use?</span><select name="device"><option value="Phone">Android / iPhone only</option><option value="Computer">Computer or laptop</option><option value="Both">Phone and computer</option></select></label>
+      <label class="field"><span>Starting budget</span><select name="budget"><option value="0">$0 — no budget</option><option value="25">Up to $25</option><option value="100">$25–$100</option></select></label>
+     </div>
+    </div>
+    <div class="form-section last"><div class="form-section-head"><span>03</span><div><b>Where you want to go</b><small>Pick the first outcome that matters</small></div></div>
+     <label class="field"><span>What is your first goal?</span><select name="goal"><option value="Find my first customer">Find my first customer</option><option value="Earn my first $100">Earn my first $100</option><option value="Build a small side income">Build a small side income</option><option value="Explore my options">Explore my options</option></select></label>
+    </div>
+    <button class="submit-button" type="submit"><span>Find my 3 paths</span><b>↗</b></button>
+    <p class="privacy-note"><span>⌑</span> Your answers stay in this browser. No account needed.</p>
+   </form>
+  </div>
+ </div>
+</section>
+<section id="results" class="results-section wrap" hidden aria-live="polite">
+ <div class="results-heading"><div><span class="eyebrow">YOUR PERSONAL SHORTLIST</span><h2>Three paths.<br><em>One next move.</em></h2><p>Start with one. Test it with real people before investing time or money.</p></div><span class="step-indicator">02 <i>—</i> 02</span></div>
+ <div id="path-cards" class="path-grid"></div><div id="action-plan" class="action-panel" hidden></div>
+ <button id="start-over" class="edit-button" type="button">← Edit my answers</button>
+</section>
+<section class="closing wrap"><div><span class="eyebrow">A NOTE ON EXPECTATIONS</span><p>Pathfinder is an early, rule-based prototype — not an AI agent or a promise of income. These ideas are starting hypotheses. Real results depend on your skills, market, effort and customer demand.</p></div><span class="closing-mark">P.</span></section>
+</main>
+<footer class="site-footer"><a class="brand" href="#"><span class="brand-symbol">P<span>↗</span></span><span>pathfinder<span class="brand-period">.</span></span></a><span>BUILD SKILLS. TALK TO CUSTOMERS. IMPROVE WITH EVIDENCE.</span><span>© PATHFINDER 2026</span></footer>
+</body></html>
