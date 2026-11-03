@@ -1,170 +1,74 @@
-const form=document.querySelector("#profile-form");
-const results=document.querySelector("#results");
-const cards=document.querySelector("#path-cards");
-const plan=document.querySelector("#action-plan");
-const startOver=document.querySelector("#start-over");
-const skillInputs=[...document.querySelectorAll('input[name="skills"]')];
-
-const paths=[
-{id:"content",name:"Short-form content support",tag:"Creative service",desc:"Help a small business turn its existing ideas, products and FAQs into useful social posts.",offer:"A starter pack of 3 caption ideas and 2 simple post designs for one clearly defined business.",skills:["Writing","Design","Video editing"],interests:["Content and social media","Helping businesses"],difficulty:"Beginner to intermediate",cost:"Can start at $0",time:"7-day sample-and-outreach sprint",tasks:["Choose one type of business you understand (for example, cafés or local shops).","Create two sample posts for a fictional business. Do not use another business’s content without permission.","Put your samples in a simple shareable folder and write one sentence about the result you offer.","Find five relevant businesses and note one genuine improvement idea for each.","Send a short, personal message with one sample. Ask if they would like to discuss a small paid trial; agree on scope before doing the work."],tools:["Canva free plan","Google Docs","Your phone"]},
-{id:"research",name:"Online research service",tag:"Research service",desc:"Collect and organise useful public information for creators, job seekers or small teams.",offer:"A focused, well-sourced research list — for example, 20 relevant podcast guests or competitor examples.",skills:["Research","Writing","Organization"],interests:["Research and information","Helping businesses","Anything practical"],difficulty:"Beginner-friendly",cost:"Can start at $0",time:"5-day sample portfolio sprint",tasks:["Choose one audience and a specific question they need answered.","Create a sample list of 10 entries with working source links and a clear structure.","Check the accuracy of every entry and explain why the information is useful.","Find five people or businesses who might need this kind of research.","Share the sample and ask what would make it more useful before offering a paid, clearly scoped project."],tools:["Google Search","Google Sheets","Google Docs"]},
-{id:"assistant",name:"Virtual assistant",tag:"Support service",desc:"Help an independent professional or small business with simple, repeatable admin tasks.",offer:"A small starter package such as spreadsheet cleanup, public-information research or organising a task list.",skills:["Organization","Communication","Research"],interests:["Helping businesses","Anything practical"],difficulty:"Beginner-friendly",cost:"Can start at $0",time:"7-day customer discovery sprint",tasks:["Choose one task you can do reliably and describe its outcome in one sentence.","Create a sample using fictional information — never use private customer data.","Make a list of 10 small businesses or independent professionals who may need help.","Send five thoughtful messages that mention a specific, relevant task you can take off their plate.","Ask for feedback and offer a small paid pilot only if they express interest. Agree on scope and access permissions first."],tools:["Google Docs or Sheets","Email","A phone"]},
-{id:"digital",name:"Simple digital resources",tag:"Digital product",desc:"Create a focused checklist, template or tracker that solves one small problem for a defined audience.",offer:"A practical one-page checklist or editable planner designed around one specific user problem.",skills:["Writing","Design","Organization"],interests:["Digital products","Content and social media"],difficulty:"Intermediate: distribution takes work",cost:"Prototype at $0",time:"Validate demand before building",tasks:["Identify one recurring problem for a specific group of people.","Talk to five people in that audience before creating the product.","Draft a one-page solution using a free document tool.","Show the draft and ask what is confusing or missing.","Only consider selling after you see real interest; check platform fees, payout access and local rules first."],tools:["Google Docs","Canva free plan","Relevant online communities"]},
-{id:"tutoring",name:"Beginner tutoring or practice",tag:"Knowledge service",desc:"Help someone practise a subject or language you genuinely know well.",offer:"A 30-minute beginner practice session with one clear learning outcome.",skills:["Communication","Writing"],interests:["Teaching and explaining"],difficulty:"Depends on subject knowledge",cost:"Can start at $0",time:"Validate with a small pilot",tasks:["Choose a subject you can teach accurately and confidently.","Define one achievable outcome for a short beginner session.","Prepare a simple lesson and a practice exercise.","Ask three to five people in a relevant community what support they need.","Offer a short introductory session and request honest feedback."],tools:["A free video-call option","Google Docs","A simple worksheet"]}
-];
-
-function syncNoneChoice(event){
- const selected=event.target;
- if(selected.value==="None yet"&&selected.checked){skillInputs.forEach(input=>{if(input!==selected)input.checked=false;});}
- if(selected.value!=="None yet"&&selected.checked){const none=skillInputs.find(input=>input.value==="None yet");if(none)none.checked=false;}
-}
-skillInputs.forEach(input=>input.addEventListener("change",syncNoneChoice));
-
-function getProfile(){
- const data=new FormData(form);
- return {country:String(data.get("country")||"").trim(),language:data.get("language"),skills:data.getAll("skills"),interest:data.get("interest"),hours:data.get("hours"),experience:data.get("experience"),device:data.get("device"),budget:data.get("budget"),goal:data.get("goal")};
-}
-function scorePath(path,profile){
- let score=0;
- const skillMatches=profile.skills.filter(skill=>skill!=="None yet"&&path.skills.includes(skill)).length;
- score+=Math.min(skillMatches,2)*3;
- if(path.interests.includes(profile.interest))score+=3;
- if(profile.experience==="Beginner"&&path.difficulty.toLowerCase().includes("beginner"))score+=2;
- if(profile.device==="Phone"&&["content","research","assistant"].includes(path.id))score+=2;
- if(Number(profile.hours)>=2)score+=1;
- if(profile.budget==="0"&&path.cost.toLowerCase().includes("$0"))score+=1;
- if(profile.skills.includes("None yet")&&["research","assistant"].includes(path.id))score+=1;
- return score;
-}
-function make(tag,className,text){
- const node=document.createElement(tag);
- if(className)node.className=className;
- if(text!==undefined)node.textContent=text;
- return node;
-}
-function renderPath(path,index){
- const article=make("article","path-card");
- const top=make("div","path-card-top");
- top.append(make("span","path-number","0"+(index+1)),make("span","tag",index===0?"BEST STARTING MATCH":path.tag));
- const heading=make("h3","",path.name);
- const desc=make("p","",path.desc);
- const offerTitle=make("h4","","A first offer to test");
- const offer=make("p","",path.offer);
- const meta=make("div","meta-row");
- [path.difficulty,path.cost,path.time].forEach(value=>meta.append(make("span","",value)));
- const button=make("button",index===0?"primary-button":"secondary-button","Build my action plan");
- button.type="button";
- button.addEventListener("click",()=>showPlan(path,button));
- article.append(top,heading,desc,offerTitle,offer,meta,button);
- return article;
-}
-function showPlan(path,sourceButton){
- plan.hidden=false;
- plan.replaceChildren();
- const eyebrow=make("div","eyebrow","YOUR FIRST-CUSTOMER PLAN");
- const heading=make("h2","",path.name);
- const intro=make("p","","Keep the first experiment small. The goal is to learn whether someone needs this — not to build a perfect business.");
- const offer=make("div","offer-box");
- offer.append(make("strong","","YOUR STARTER OFFER"),make("p","",path.offer));
- const list=make("div","checklist");
- path.tasks.forEach((task,index)=>{
-  const label=make("label","task");
-  const input=document.createElement("input");
-  input.type="checkbox";
-  input.dataset.task=path.id+"-"+index;
-  const key="pathfinder-"+input.dataset.task;
-  try{input.checked=localStorage.getItem(key)==="true";}catch(error){}
-  input.addEventListener("change",()=>{try{localStorage.setItem(key,String(input.checked));}catch(error){}});
-  label.append(input,make("span","",task));
-  list.append(label);
- });
- const toolsTitle=make("h3","","Free tools to consider");
- const tools=make("p","",path.tools.join(" · "));
- const closeNote=make("p","plan-note","Before contacting anyone, respect their privacy, follow platform rules and agree clearly on the work and payment terms.");
- plan.append(eyebrow,heading,intro,offer,list,toolsTitle,tools,closeNote);
- plan.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
-}
-form.addEventListener("submit",event=>{
- event.preventDefault();
- if(!form.reportValidity())return;
- const profile=getProfile();
- const ranked=paths.map((path,originalIndex)=>({path,score:scorePath(path,profile),originalIndex})).sort((a,b)=>b.score-a.score||a.originalIndex-b.originalIndex).slice(0,3);
- cards.replaceChildren(...ranked.map((item,index)=>renderPath(item.path,index)));
- plan.hidden=true;
- results.hidden=false;
- results.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
-});
-startOver.addEventListener("click",()=>{
- results.hidden=true;
- plan.hidden=true;
- document.querySelector("#start").scrollIntoView({behavior:"smooth",block:"start"});
-});
-
-
-// Visual enhancements are intentionally isolated from the product logic.
-(()=>{
- const loader=document.getElementById("site-loader");
- const finishLoading=()=>{if(loader)loader.classList.add("is-hidden");};
- window.addEventListener("load",()=>window.setTimeout(finishLoading,900),{once:true});
- window.setTimeout(finishLoading,2800);
- const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
- if(reduceMotion)return;
- const revealTargets=document.querySelectorAll(".section-heading,.step-card,.start-intro,.form-card,.expectations");
- if(!("IntersectionObserver" in window)){revealTargets.forEach(node=>node.classList.add("is-visible"));return;}
- document.documentElement.classList.add("motion-ready");
- revealTargets.forEach(node=>node.classList.add("reveal-on-scroll"));
- const observer=new IntersectionObserver(entries=>{
-  entries.forEach(entry=>{
-   if(entry.isIntersecting){entry.target.classList.add("is-visible");observer.unobserve(entry.target);}
-  });
- },{threshold:.12,rootMargin:"0px 0px -24px 0px"});
- revealTargets.forEach(node=>observer.observe(node));
-})();
-
-
-// Consistent reveal choreography and tactile button feedback (kept separate from matching logic).
-(()=> {
- const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
- const revealGroups=[
-  ...document.querySelectorAll(".hero-content,.hero-product,.section-heading,.step-card,.start-intro,.form-card,.expectations,.footer")
- ];
- const staggerGroups=[...document.querySelectorAll(".steps-grid,.reassurance-list,.form-grid,.skill-options")];
- staggerGroups.forEach(group=>[...group.children].forEach((child,index)=>{
-  child.classList.add("reveal-child");
-  child.style.setProperty("--reveal-delay",(Math.min(index,6)*75)+"ms");
- }));
- if(!reduce){
-  document.documentElement.classList.add("motion-ready");
-  revealGroups.forEach(node=>node.classList.add("reveal-on-scroll"));
-  if("IntersectionObserver" in window){
-   const io=new IntersectionObserver(entries=>entries.forEach(entry=>{
-    if(entry.isIntersecting){entry.target.classList.add("is-visible");io.unobserve(entry.target);}
-   }),{threshold:.08,rootMargin:"0px 0px -35px 0px"});
-   revealGroups.forEach(node=>io.observe(node));
-  }else revealGroups.forEach(node=>node.classList.add("is-visible"));
- }
- document.addEventListener("click",event=>{
-  const button=event.target.closest("button,a.button,a.nav-button");
-  if(!button||reduce)return;
-  const rect=button.getBoundingClientRect();
-  const dot=document.createElement("span");
-  dot.className="ripple-dot";
-  dot.style.left=(event.clientX?event.clientX-rect.left:rect.width/2)+"px";
-  dot.style.top=(event.clientY?event.clientY-rect.top:rect.height/2)+"px";
-  button.append(dot);
-  window.setTimeout(()=>dot.remove(),650);
- });
- const formEl=document.querySelector("#profile-form");
- if(formEl){
-  formEl.addEventListener("submit",()=>{
-   window.setTimeout(()=>{
-    const result=document.querySelector("#results");
-    if(result&&!result.hidden){
-     result.classList.remove("result-refresh");
-     void result.offsetWidth;
-     result.classList.add("result-refresh");
-    }
-   },40);
-  });
- }
-})();
+const studios=[
+{id:"video",name:"Video & Film Studio",short:"Video & Film",symbol:"▣",accent:"#b4a6ff",tint:"#b4a6ff20",glow:"#9d8cff",desc:"Turn raw footage and bold ideas into polished visual stories.",agents:[
+["Cinematic Video Editor","Shape raw footage into a compelling, story-led edit.","✂",["Timeline editing","Pacing & storytelling","Transitions"],["Rough cut","Cinematic edit","Social cutdown"]],
+["3D Animation Agent","Develop motion concepts, scenes and 3D animation plans.","◈",["3D scene planning","Character motion","Animation briefs"],["Scene concept","Product animation","Animation storyboard"]],
+["VFX Specialist","Plan visual effects, compositing and shot enhancements.","✧",["VFX breakdown","Compositing plan","Effects direction"],["VFX shot plan","Green-screen workflow","Effects brief"]],
+["Color Grading Agent","Create a consistent visual mood with professional color direction.","◉",["Look development","Color references","Shot matching"],["Cinematic look","Color palette","Shot matching"]],
+["Motion Graphics Agent","Design title sequences, animated graphics and visual explainers.","▤",["Title design","Kinetic typography","Graphic sequences"],["Title sequence","Animated explainer","Lower thirds"]],
+["Sound Designer","Build an immersive soundscape with effects and audio direction.","♫",["Soundscape design","Foley planning","Audio layering"],["Sound map","Foley list","Audio polish plan"]],
+["Voiceover Agent","Prepare voiceover scripts, direction and narration workflows.","◖",["Narration scripts","Voice direction","Timing notes"],["Voiceover script","Tone direction","Narration plan"]],
+["Trailer Creator","Craft high-impact trailers, teasers and launch videos.","▶",["Trailer structure","Hook development","Music cues"],["Movie trailer","Product teaser","Launch trailer"]],
+["Video Scriptwriter","Write visual-first scripts, shot lists and storyboards.","✎",["Scriptwriting","Shot lists","Storyboards"],["Ad script","YouTube script","Shot list"]],
+["Short-form Video Agent","Adapt ideas into engaging vertical videos for social platforms.","▯",["Hooks & pacing","Vertical formats","Caption planning"],["Reel concept","TikTok structure","Shorts repurpose"]]]},
+{id:"design",name:"Design Studio",short:"Design",symbol:"✳",accent:"#ffb77c",tint:"#ffb77c20",glow:"#ffad70",desc:"Create standout visuals, brand systems and digital experiences.",agents:[
+["Brand Identity Designer","Build a coherent visual identity for a product or business.","✳",["Brand direction","Visual systems","Guidelines"],["Brand concept","Visual identity","Brand guide"]],
+["Logo Designer","Explore distinctive logo concepts and visual directions.","◒",["Logo concepts","Symbol exploration","Typography"],["Logo brief","Concept directions","Logo critique"]],
+["UI/UX Designer","Shape intuitive user journeys, wireframes and interface systems.","▦",["User flows","Wireframes","Design systems"],["App flow","Landing page UX","Dashboard layout"]],
+["Social Media Designer","Create consistent visual concepts for social content.","▧",["Post systems","Carousel concepts","Templates"],["Carousel brief","Post series","Story templates"]],
+["Poster Designer","Develop bold campaign posters and event artwork.","▣",["Composition","Typography","Art direction"],["Event poster","Film poster","Campaign key art"]],
+["Thumbnail Designer","Design high-contrast thumbnail concepts built for clarity.","▣",["Visual hierarchy","Title treatment","Concept testing"],["YouTube thumbnail","Podcast cover","Video cover"]],
+["Image Retouching Agent","Plan precise image cleanup, retouching and enhancement.","◉",["Retouching notes","Image cleanup","Visual consistency"],["Portrait retouch","Product cleanup","Photo enhancement"]],
+["3D Product Designer","Develop 3D product visualization concepts and render briefs.","⬡",["Product form","Materials & lighting","Render direction"],["Product render brief","Packaging mockup","3D concept"]]]},
+{id:"business",name:"Business Studio",short:"Business",symbol:"↗",accent:"#79d9b6",tint:"#79d9b620",glow:"#67d4ad",desc:"Research opportunities, validate ideas and build smarter businesses.",agents:[
+["Business Strategist","Turn a business challenge into a clear strategic direction.","⌘",["Business analysis","Positioning","Roadmaps"],["Business plan","Growth strategy","Offer positioning"]],
+["Market Research Agent","Map customer needs, market signals and emerging opportunities.","⌕",["Market sizing","Customer segments","Research synthesis"],["Market overview","Customer profile","Opportunity scan"]],
+["Startup Builder","Move an early idea toward a testable startup concept.","↗",["Idea validation","MVP planning","Launch roadmap"],["Validate an idea","MVP scope","Launch checklist"]],
+["Business Model Designer","Explore practical business models and revenue streams.","▤",["Revenue models","Pricing logic","Unit economics"],["Business model","Pricing options","Revenue map"]],
+["Competitor Analyst","Compare alternatives and identify meaningful differentiation.","◎",["Competitor mapping","Positioning gaps","Feature comparison"],["Competitor snapshot","SWOT analysis","Differentiation"]],
+["Product Manager","Translate product goals into requirements and prioritized plans.","◫",["Product requirements","Prioritization","Roadmaps"],["PRD draft","Feature roadmap","User stories"]],
+["Customer Research Agent","Understand customer pain points, motivations and feedback.","♧",["Interview guides","Survey design","Insight synthesis"],["Interview plan","Survey questions","Persona draft"]],
+["Growth Strategist","Find and prioritize experiments that can drive sustainable growth.","⌁",["Growth loops","Experiment design","Metrics"],["Growth audit","Experiment backlog","Activation plan"]]]},
+{id:"development",name:"Development Studio",short:"Development",symbol:"⌘",accent:"#7ebaff",tint:"#7ebaff20",glow:"#70b2ff",desc:"Plan, build, review and improve digital products and software.",agents:[
+["Website Developer","Plan and build responsive websites and landing pages.","〈/〉",["Frontend planning","Responsive UI","Web structure"],["Landing page","Business website","Portfolio site"]],
+["Frontend Developer","Build polished interfaces and reusable frontend components.","▣",["Component design","Accessibility","UI implementation"],["UI component","Responsive section","Frontend review"]],
+["Backend Developer","Design application logic, services and secure integrations.","⌘",["API design","Data flow","Server logic"],["API blueprint","Service architecture","Backend review"]],
+["Mobile App Developer","Shape mobile app architecture, flows and feature plans.","▯",["App architecture","Mobile UX","Feature planning"],["App concept","Screen flow","MVP feature list"]],
+["Database Architect","Model reliable data structures and query strategies.","▤",["Schema design","Data modeling","Query planning"],["Database schema","ERD brief","Data audit"]],
+["API Integration Agent","Plan integrations between services and external APIs.","⇄",["API mapping","Auth flows","Integration plans"],["Integration blueprint","Webhook plan","API documentation"]],
+["Bug Fixer","Investigate errors and create clear, testable debugging steps.","⚒",["Bug triage","Root-cause analysis","Test cases"],["Debug a problem","Error analysis","Test plan"]],
+["Code Reviewer","Review code for maintainability, quality and common risks.","⌕",["Code quality","Security review","Refactoring"],["Code review","Refactor plan","Quality checklist"]]]},
+{id:"marketing",name:"Marketing & Sales Studio",short:"Marketing & Sales",symbol:"◉",accent:"#f29ac8",tint:"#f29ac820",glow:"#ec8fc1",desc:"Reach the right audience with sharper messaging and focused campaigns.",agents:[
+["Marketing Strategist","Build a focused marketing plan around your audience and goals.","◉",["Positioning","Channel strategy","Campaign planning"],["Marketing plan","Channel mix","Campaign brief"]],
+["SEO Specialist","Plan search visibility through keywords, content and technical priorities.","⌕",["Keyword research","On-page SEO","Content gaps"],["SEO audit brief","Keyword map","Content cluster"]],
+["Conversion Copywriter","Write clear persuasive copy for pages, campaigns and offers.","✎",["Landing page copy","Value propositions","CTAs"],["Landing page","Product description","Ad copy"]],
+["Social Media Manager","Plan channel strategy, publishing rhythms and community content.","▧",["Content calendars","Platform strategy","Community"],["Monthly calendar","Channel plan","Post ideas"]],
+["Email Marketing Agent","Design lifecycle email sequences and campaign messaging.","✉",["Email sequences","Segmentation","Subject lines"],["Welcome flow","Launch emails","Newsletter"]],
+["Lead Generation Agent","Define ideal customers and ethical prospecting workflows.","◎",["ICP definition","Lead qualification","Outreach"],["Ideal customer profile","Lead criteria","Outreach plan"]],
+["Ad Campaign Manager","Structure paid campaign concepts, audiences and creative tests.","↗",["Campaign structure","Audience hypotheses","Creative testing"],["Campaign brief","Ad variations","Testing plan"]],
+["Sales Funnel Builder","Map customer journeys from first touch to conversion.","⌁",["Funnel mapping","Offer design","Conversion steps"],["Funnel blueprint","Lead magnet","Follow-up flow"]]]},
+{id:"audio",name:"Audio & Music Studio",short:"Audio & Music",symbol:"♫",accent:"#e9d27b",tint:"#e9d27b20",glow:"#dfc568",desc:"Shape voice, music and sound into a polished listening experience.",agents:[
+["Music Producer","Develop musical direction, arrangement and production briefs.","♫",["Arrangement","Genre direction","Production notes"],["Track concept","Music brief","Arrangement plan"]],
+["Audio Editor","Plan clean edits, timing and professional audio workflows.","◖",["Dialogue editing","Timing","Audio cleanup"],["Podcast edit","Dialogue cleanup","Audio workflow"]],
+["Voice Generator","Prepare voice scripts and text-to-speech direction.","◗",["Voice direction","Pronunciation","Script timing"],["Narration","Character voice brief","Voice script"]],
+["Podcast Producer","Structure episodes and production workflows for podcasts.","🎙",["Episode structure","Show notes","Production"],["Episode outline","Podcast launch","Show notes"]],
+["Sound Effects Creator","Design sound effect concepts and asset lists for media.","✧",["SFX concepts","Foley","Layering"],["SFX list","Scene sound map","Foley brief"]],
+["Audio Restoration Agent","Diagnose noise and create audio restoration workflows.","◉",["Noise diagnosis","Restoration","Quality checks"],["Noise cleanup plan","Audio diagnosis","Restoration brief"]],
+["Music Composer","Create musical concepts, themes and composition directions.","♬",["Themes","Mood & tempo","Composition"],["Theme concept","Background score","Music direction"]],
+["Dubbing Agent","Prepare dubbing scripts, timing and localization workflows.","◫",["Dialogue adaptation","Timing","Localization"],["Dub script","Scene timing","Localization brief"]]]}];
+const $=s=>document.querySelector(s);let active="all",current=null,projects=JSON.parse(localStorage.getItem("agentStudioProjects")||"[]");
+function renderStudios(){ $("#studio-grid").innerHTML=studios.map(s=>`<button class="studio-card" data-studio="${s.id}" style="--accent:${s.accent};--tint:${s.tint};--glow:${s.glow}"><div class="studio-top"><span class="studio-symbol">${s.symbol}</span><span class="studio-arrow">↗</span></div><h3>${s.name}</h3><p>${s.desc}</p><span class="studio-meta">${s.agents.length} specialist agents · Explore studio</span></button>`).join("");document.querySelectorAll(".studio-card").forEach(b=>b.onclick=()=>showStudio(b.dataset.studio))}
+function renderAgents(){let list=studios.flatMap(s=>s.agents.map((a,i)=>({a,s,i})));if(active!=="all")list=list.filter(x=>x.s.id===active);let q=$("#search").value.toLowerCase().trim();if(q)list=list.filter(x=>(x.a[0]+" "+x.a[1]+" "+x.s.name+" "+x.a[3].join(" ")).toLowerCase().includes(q));$("#agents-title").textContent=active==="all"?"Popular agents":studios.find(s=>s.id===active).short+" specialists";$("#agents-subtitle").textContent=q?"Matching specialists for “"+q+"”.":"Choose a specialist to open its dedicated workspace.";$("#agent-grid").innerHTML=list.slice(0,15).map(x=>`<article class="agent-card" style="--accent:${x.s.accent};--tint:${x.s.tint}"><div class="agent-head"><span class="agent-icon">${x.a[2]}</span><div><h3>${x.a[0]}</h3><div class="agent-studio">${x.s.short} Studio</div></div></div><p>${x.a[1]}</p><div class="tags">${x.a[3].slice(0,3).map(t=>`<span class="tag">${t}</span>`).join("")}</div><div class="agent-foot"><small>Specialist workspace</small><button data-agent="${x.s.id}:${x.i}">Open workspace ↗</button></div></article>`).join("")||"<p>No matching agents. Try another search.</p>";document.querySelectorAll("[data-agent]").forEach(b=>b.onclick=()=>{let [id,i]=b.dataset.agent.split(":");openAgent(studios.find(s=>s.id===id),+i)})}
+function showStudio(id){active=id;document.querySelectorAll(".studio-nav-item").forEach(b=>b.classList.toggle("active",b.dataset.studio===id));renderAgents();$("#agents-section").scrollIntoView({behavior:"smooth"});$("#crumb").textContent=studios.find(s=>s.id===id).short+" Studio"}
+function openAgent(s,i){current={s,a:s.agents[i]};let a=current.a;$("#emblem").textContent=a[2];$("#emblem").style.background=s.tint;$("#emblem").style.color=s.accent;$("#modal-studio").textContent=s.name.toUpperCase();$("#modal-title").textContent=a[0];$("#modal-desc").textContent=a[1];$("#task-chips").innerHTML=a[4].map(t=>`<button class="task-chip">${t}</button>`).join("");document.querySelectorAll(".task-chip").forEach(b=>b.onclick=()=>{b.classList.toggle("selected");if(!$("#brief").value)$("#brief").value="I need help with: "+b.textContent+".\n\nGoal:\nAudience:\nStyle or references:\nDeliverable:"});$("#capabilities").innerHTML=a[3].map(c=>"<li>"+c+"</li>").join("");$("#brief").value="";$("#files").value="";$("#file-name").textContent="Browse files";$("#confirmation").hidden=true;$("#modal").classList.add("open");$("#modal").setAttribute("aria-hidden","false");document.body.style.overflow="hidden"}
+function closeModal(){$("#modal").classList.remove("open");$("#modal").setAttribute("aria-hidden","true");document.body.style.overflow=""}
+function updateProjects(){localStorage.setItem("agentStudioProjects",JSON.stringify(projects));$("#project-count").textContent=projects.length}
+function toast(t){$("#toast").textContent=t;$("#toast").classList.add("show");setTimeout(()=>$("#toast").classList.remove("show"),2400)}
+$("#files").onchange=e=>$("#file-name").textContent=e.target.files.length?[...e.target.files].map(f=>f.name).join(", "):"Browse files";
+$("#prepare").onclick=()=>{let brief=$("#brief").value.trim();if(!brief){toast("Add a short project brief first.");$("#brief").focus();return}projects.unshift({id:Date.now(),agent:current.a[0],studio:current.s.short,brief,date:new Date().toLocaleDateString()});updateProjects();$("#confirmation").hidden=false;toast("Task brief saved in this browser preview.")};
+$("#close").onclick=closeModal;$("#modal").onclick=e=>{if(e.target===$("#modal"))closeModal()};document.onkeydown=e=>{if(e.key==="Escape")closeModal()};
+$("#search").oninput=()=>{active="all";renderAgents()};
+document.querySelectorAll(".studio-nav-item").forEach(b=>b.onclick=()=>showStudio(b.dataset.studio));
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav").forEach(n=>n.classList.remove("active"));b.classList.add("active");if(b.dataset.view==="projects"){$("#crumb").textContent="My projects";$("#agents-title").textContent="Your prepared tasks";$("#agents-subtitle").textContent="Briefs saved in this browser preview.";$("#agent-grid").innerHTML=projects.length?projects.map(p=>`<article class="agent-card"><div class="agent-head"><span class="agent-icon">▤</span><div><h3>${escapeHTML(p.agent)}</h3><div class="agent-studio">${escapeHTML(p.studio)} · ${p.date}</div></div></div><p>${escapeHTML(p.brief)}</p><div class="agent-foot"><small>Brief saved locally</small><span class="tag">Prepared</span></div></article>`).join(""):"<p>No prepared tasks yet. Open an agent workspace to start.</p>";$("#agents-section").scrollIntoView({behavior:"smooth"})}else if(b.dataset.view==="teams")toast("Multi-agent collaboration is planned for a later release.");else{$("#crumb").textContent="Discover agents";active="all";renderAgents();$("#hero").scrollIntoView({behavior:"smooth"})}});
+$("#browse").onclick=()=>$("#studios").scrollIntoView({behavior:"smooth"});$("#explore").onclick=()=>$("#studios").scrollIntoView({behavior:"smooth"});$("#view-all").onclick=()=>{active="all";$("#search").value="";renderAgents()};$("#mobile-menu").onclick=()=>$("#sidebar").classList.toggle("open");document.addEventListener("click",e=>{if(innerWidth<740&&!e.target.closest("#sidebar")&&!e.target.closest("#mobile-menu"))$("#sidebar").classList.remove("open")});
+renderStudios();renderAgents();updateProjects();
