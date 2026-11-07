@@ -1,6 +1,6 @@
 # Agent Studio — Product Prototype
 
-A responsive multi-studio AI agent platform prototype. Each studio groups multiple specialist agents; each agent opens a hybrid workspace with task presets, a project brief, local file selection, capability details and a prepared-task record.
+A responsive multi-studio AI agent platform prototype. Each studio groups specialist agents; each agent opens a workspace with task presets, a project brief, local file selection, capability details and a prepared-task record.
 
 ## Studios in this prototype
 - Video & Film — 10 agents
@@ -19,15 +19,33 @@ A responsive multi-studio AI agent platform prototype. Each studio groups multip
 - View prepared briefs in My Projects
 - Responsive desktop and mobile layout
 
-## Important execution status
-This is a front-end prototype, not a live AI execution service. It does not call AI models, edit media, generate deliverable files, deploy code or upload selected files. The UI clearly labels this status. Do not market the listed agents as operational until their execution tools are connected and tested.
+## Product architecture: User-Owned Execution
+
+**The user's device executes the agents. Agent Studio does not provide compute for customer tasks.**
+
+- The Local Runtime on the user's device will orchestrate and execute agent jobs.
+- Local files and project data stay on-device by default.
+- Models run locally or use a provider/account explicitly configured by the user.
+- Any external data transfer must be disclosed and authorized.
+- API keys must never be embedded in frontend code or agent packages.
+- Agents receive only narrow, task-scoped capabilities; permissions default to deny.
+- There is no silent fallback to hosted execution.
+
+See [docs/LOCAL_FIRST_ARCHITECTURE.md](docs/LOCAL_FIRST_ARCHITECTURE.md) for the architecture, security requirements, first-release scope and acceptance criteria.
+
+## Current execution status
+
+This repository is still a front-end prototype. It does not yet include the Local Runtime, secure sandbox, model connections or live agent execution. The current UI does not upload selected files. Do not market the listed agents as operational until the local execution path has been implemented and tested.
 
 ## Engineering roadmap
-1. Define an agent execution contract: input schema, tools, provider/model, output schema, task states and error handling.
-2. Build a secure backend orchestrator; never expose provider API keys in browser code.
-3. Connect one valuable agent end-to-end before claiming live execution.
-4. Add secure file storage, durable projects, quotas and observability.
-5. Add multi-agent collaboration after individual agents are reliable.
+
+1. Define versioned task, agent-manifest, permission and audit-event schemas.
+2. Build a minimal desktop Local Runtime with secure pairing, status and cancellation.
+3. Implement a deny-by-default capability broker and OS-enforced worker isolation.
+4. Ship one bounded end-to-end local agent (CSV Analyzer) with tests.
+5. Add optional user-configured model providers with explicit data-flow notices.
+6. Expand to more agents and platforms only after the security acceptance criteria pass.
 
 ## Run
-Open index.html in a modern browser. No build step is required.
+
+Open `index.html` in a modern browser. No build step is required.
