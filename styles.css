@@ -60,3 +60,54 @@ footer{padding:24px 0 32px;font-size:9px}
 @media(max-width:1050px){.content{padding:0 27px}.topbar{padding:0 27px}.hero{margin:0 -10px;padding:0 22px}.hero h1{font-size:clamp(44px,5vw,60px)}}
 @media(max-width:740px){.sidebar{width:264px}.content{padding:0 17px}.hero{margin:0 -8px;padding:0 18px;border-radius:0 0 18px 18px;min-height:0}.hero>div:first-child{padding:42px 0 0}.hero h1{font-size:46px;letter-spacing:-2.8px}.hero p{font-size:11px}.hero-art{height:245px;transform:scale(.82);margin-top:-3px}.value-strip{min-height:0;padding:17px 2px}.section-head{margin-top:46px}.section-head h2{font-size:29px}.search{width:100%}.studio-grid,.agent-grid{grid-template-columns:1fr;gap:12px}.studio-card{min-height:160px;padding:18px}.agents-section .section-head{margin-top:50px}.how{margin:55px 0 38px;padding:23px;border-radius:16px}.how h2{font-size:32px}.topbar{height:60px}}
 @media(prefers-reduced-motion:reduce){.studio-card:hover,.agent-card:hover{transform:none}}
+
+
+/* Workbench direction — calm, structured, premium professional workspace */
+:root{--workline:rgba(177,190,224,.13);--worksurface:rgba(18,27,45,.72);--workmuted:#9aa8c1}
+body{background-color:#080d18;background-image:radial-gradient(ellipse at 74% 5%,rgba(100,104,190,.11),transparent 32%),radial-gradient(ellipse at 15% 48%,rgba(53,123,129,.055),transparent 34%)}
+.sidebar{background:rgba(9,15,27,.97);border-right:1px solid rgba(173,187,220,.11)}
+.workspace{background:linear-gradient(135deg,rgba(149,132,255,.105),rgba(255,255,255,.018));border-color:rgba(173,187,220,.15);box-shadow:inset 0 1px rgba(255,255,255,.035)}
+.account{border-top:1px solid rgba(173,187,220,.09);margin-top:18px}
+.topbar{height:68px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+.content{max-width:1540px}
+.hero{min-height:350px;margin:18px -8px 0;padding:0 38px;border:1px solid rgba(177,190,224,.13);border-radius:20px;background:linear-gradient(112deg,rgba(20,29,48,.98),rgba(14,25,41,.95) 62%,rgba(24,37,54,.92));box-shadow:0 22px 70px rgba(0,0,0,.16)}
+.hero:after{content:"";position:absolute;inset:auto 0 0;height:1px;background:linear-gradient(90deg,transparent,rgba(185,174,255,.48),rgba(129,216,202,.25),transparent)}
+.hero>div:first-child{padding:48px 0}
+.hero h1{font-size:clamp(43px,4.4vw,62px);letter-spacing:-3.1px}
+.hero p{max-width:420px;font-size:12px}
+.hero-art{height:320px}
+.value-strip{min-height:65px;margin:0 8px;padding:0 12px}
+.workbench-bar{display:flex;justify-content:space-between;align-items:center;gap:18px;margin:36px 0 0;padding:0 4px}
+.workbench-kicker{display:flex;align-items:center;gap:8px;color:#8e9bb4;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+.workbench-kicker:before{content:"";width:7px;height:7px;border-radius:50%;background:#83d8bb;box-shadow:0 0 12px rgba(131,216,187,.65)}
+.workbench-bar h2{margin:7px 0 3px;font:600 24px/1.2 var(--display);letter-spacing:-.8px;color:#f1f4ff}
+.workbench-bar p{margin:0;color:#8e9bb4;font-size:10px}
+.workbench-note{display:flex;align-items:center;gap:9px;padding:10px 13px;border:1px solid var(--workline);border-radius:10px;background:rgba(255,255,255,.025);color:#aeb9ce;font-size:9px;white-space:nowrap}
+.workbench-note b{color:#c1b5ff;font-size:13px}
+.work-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:17px 0 0}
+.overview-tile{position:relative;display:flex;align-items:center;gap:13px;min-height:82px;padding:15px 17px;border:1px solid var(--workline);border-radius:13px;background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.012));overflow:hidden}
+.overview-tile:after{content:"";position:absolute;right:-30px;bottom:-42px;width:90px;height:90px;border-radius:50%;background:var(--tile-glow,rgba(164,146,255,.18));filter:blur(25px)}
+.overview-icon{position:relative;z-index:1;display:grid;place-items:center;width:39px;height:39px;flex:0 0 39px;border:1px solid rgba(182,190,226,.12);border-radius:11px;background:rgba(164,146,255,.09);color:#c3b7ff;font-size:17px}
+.overview-tile:nth-child(2) .overview-icon{background:rgba(111,211,190,.09);color:#8cddc7}
+.overview-tile:nth-child(3) .overview-icon{background:rgba(123,161,231,.10);color:#a9c5ff}
+.overview-tile strong,.overview-tile small{position:relative;z-index:1;display:block}
+.overview-tile strong{font:600 18px/1.1 var(--display);letter-spacing:-.4px;color:#f1f4ff}
+.overview-tile small{margin-top:5px;font-size:9px;color:#94a1ba}
+.section-head{margin-top:52px}
+.studio-card{min-height:174px}
+.studio-card,.agent-card{box-shadow:0 10px 30px rgba(0,0,0,.09),inset 0 1px rgba(255,255,255,.025)}
+.studio-card:focus-visible,.agent-card:focus-within{outline:2px solid rgba(178,163,255,.75);outline-offset:3px}
+.how{box-shadow:0 18px 55px rgba(0,0,0,.12)}
+footer{border-top-color:rgba(177,190,224,.10)}
+@media(max-width:740px){
+ .hero{margin:10px -7px 0;padding:0 19px;min-height:0}
+ .hero>div:first-child{padding:38px 0 0}
+ .hero h1{font-size:43px}
+ .workbench-bar{align-items:flex-start;flex-direction:column;margin-top:27px}
+ .workbench-bar h2{font-size:22px}
+ .workbench-note{white-space:normal}
+ .work-overview{grid-template-columns:1fr;gap:9px;margin-top:13px}
+ .overview-tile{min-height:72px;padding:12px 14px}
+ .section-head{margin-top:42px}
+}
+@media(min-width:741px) and (max-width:1050px){.work-overview{grid-template-columns:repeat(3,minmax(0,1fr))}.overview-tile{padding:12px}.overview-tile strong{font-size:16px}}
