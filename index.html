@@ -2,81 +2,83 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#090d18"><meta name="description" content="Agent Studio — a focused workspace for specialized AI work.">
-<title>Agent Studio — Your AI workbench</title>
+<meta name="theme-color" content="#f5f5f2"><meta name="description" content="Agent Studio — a focused workspace for specialist AI work, built around your device and your data.">
+<title>Agent Studio — Make room for great work</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="icon" href="mark.svg"><link rel="stylesheet" href="styles.css?v=workbench4"><script src="app.js?v=workbench5" defer></script>
+<link rel="icon" href="mark.svg"><link rel="stylesheet" href="styles.css?v=studio-v2"><script src="app.js?v=studio-v2" defer></script>
 </head>
 <body>
 <div class="app-shell">
 <aside class="sidebar" id="sidebar">
- <a class="brand" href="#" aria-label="Agent Studio home"><img src="mark.svg" alt=""><span>agent<span>studio</span></span></a>
- <button class="workspace-switcher" type="button"><span class="workspace-avatar">A</span><span class="switcher-copy"><strong>Personal workspace</strong><small>Free workspace</small></span><span class="switcher-chevron">⌄</span></button>
- <div class="side-group"><div class="side-heading">WORKSPACE</div>
-  <nav class="main-nav">
-   <button class="nav active" data-view="discover"><span class="nav-icon">⌂</span><span>Overview</span></button>
-   <button class="nav" data-view="projects"><span class="nav-icon">▤</span><span>Projects & tasks</span><b id="project-count">0</b></button>
-   <button class="nav" data-view="teams"><span class="nav-icon">⌘</span><span>Agent teams</span><em>SOON</em></button>
+  <a class="brand" href="#" aria-label="Agent Studio home"><img src="mark.svg" alt=""><span>agent<span class="brand-light">studio</span></span><span class="brand-beta">BETA</span></a>
+  <button class="workspace-switcher" id="workspace-switcher"><span class="workspace-avatar">A</span><span class="workspace-copy"><strong>Personal workspace</strong><small>Free workspace</small></span><span class="switcher-caret">⌄</span></button>
+  <div class="rail-label">WORKSPACE</div>
+  <nav class="rail-nav">
+    <button class="rail-link is-active" data-view="overview"><span class="rail-icon">⌂</span><span>Overview</span></button>
+    <button class="rail-link" data-view="projects"><span class="rail-icon">▤</span><span>Projects & tasks</span><b id="project-count">0</b></button>
+    <button class="rail-link" id="project-nav-shortcut"><span class="rail-icon">◷</span><span>Recent activity</span></button>
   </nav>
- </div>
- <div class="side-group studios-group"><div class="side-heading">SPECIALIST STUDIOS</div>
-  <nav id="studio-nav">
-   <button class="studio-nav-item" data-studio="video"><i class="studio-dot video-dot"></i><span>Video & Film</span><small>10</small></button>
-   <button class="studio-nav-item" data-studio="design"><i class="studio-dot design-dot"></i><span>Design</span><small>8</small></button>
-   <button class="studio-nav-item" data-studio="business"><i class="studio-dot business-dot"></i><span>Business</span><small>8</small></button>
-   <button class="studio-nav-item" data-studio="development"><i class="studio-dot dev-dot"></i><span>Development</span><small>8</small></button>
-   <button class="studio-nav-item" data-studio="marketing"><i class="studio-dot marketing-dot"></i><span>Marketing & Sales</span><small>8</small></button>
-   <button class="studio-nav-item" data-studio="audio"><i class="studio-dot audio-dot"></i><span>Audio & Music</span><small>8</small></button>
-  </nav>
- </div>
- <div class="sidebar-bottom">
-  <div class="local-card"><div class="local-card-icon">◈</div><div><strong>Your files stay yours</strong><p>Project briefs are saved in this browser preview.</p></div><span class="local-indicator"></span></div>
-  <div class="account-row"><span class="account-avatar">U</span><span><strong>Your account</strong><small>Personal plan</small></span><button aria-label="Account options">•••</button></div>
- </div>
+  <div class="rail-divider"></div>
+  <div class="rail-section-head"><span class="rail-label">SPECIALIST STUDIOS</span><span class="rail-count">06</span></div>
+  <nav class="rail-nav studio-nav" id="studio-nav"></nav>
+  <div class="sidebar-spacer"></div>
+  <div class="local-trust-card"><div class="trust-mark">◈</div><div><strong>Your work stays yours.</strong><p>Local-first by design. Your files are not uploaded in this preview.</p></div><span class="trust-dot"></span></div>
+  <div class="sidebar-profile"><span class="profile-avatar">U</span><span class="profile-copy"><strong>Your account</strong><small>Personal workspace</small></span><button aria-label="Account menu">•••</button></div>
+  <button class="sidebar-close" id="sidebar-close" aria-label="Close navigation">×</button>
 </aside>
 <main class="main-area">
- <header class="topbar">
-  <button class="mobile-menu" id="mobile-menu" aria-label="Open navigation">☰</button>
-  <div class="breadcrumb"><span>Workspace</span><b>/</b><strong id="crumb">Overview</strong></div>
-  <div class="topbar-actions"><label class="top-search">⌕ <input aria-label="Search agents" placeholder="Search your workspace..." type="search" id="top-search"></label><span class="runtime-status"><i></i> Preview mode</span><span class="user-avatar">U</span></div>
- </header>
- <div class="content">
-  <section class="welcome-row" id="hero">
-   <div><div class="welcome-kicker"><span class="live-mark"></span> YOUR AI WORKSPACE</div><h1>Good work starts<br><span>with the right team.</span></h1><p>Bring ideas, specialist skills and project briefs together in one calm, focused workspace.</p>
-    <div class="welcome-actions"><button class="primary" id="browse">Explore specialists <span>↗</span></button><div class="privacy-caption"><span>◈</span> Your workspace. Your workflow.</div></div>
-   </div>
-   <div class="welcome-visual" aria-hidden="true"><div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div><div class="visual-orbit orbit-three"></div><div class="visual-core"><img src="mark.svg" alt=""></div><div class="visual-node node-one"><b>✳</b><span>Creative</span></div><div class="visual-node node-two"><b>⌘</b><span>Build</span></div><div class="visual-node node-three"><b>↗</b><span>Grow</span></div><div class="visual-caption">SPECIALISTS, IN ONE PLACE</div></div>
-  </section>
-  <section class="dashboard-section">
-   <div class="section-title-row"><div><div class="section-overline">WORKSPACE AT A GLANCE</div><h2>Your workbench</h2><p>Everything starts here. Pick up a project or bring in a specialist.</p></div><div class="workbench-badge"><span>✦</span> Built around your work</div></div>
-   <div class="metrics-grid">
-    <article class="metric-card"><div class="metric-top"><span>Specialist studios</span><span class="metric-icon purple">▦</span></div><strong>06</strong><small>Dedicated areas of expertise</small><div class="metric-track"><i style="width:100%"></i></div></article>
-    <article class="metric-card"><div class="metric-top"><span>Available agents</span><span class="metric-icon mint">✳</span></div><strong>50</strong><small>Specialists ready to be explored</small><div class="metric-track mint-track"><i style="width:100%"></i></div></article>
-    <article class="metric-card"><div class="metric-top"><span>Prepared briefs</span><span class="metric-icon blue">▤</span></div><strong id="prepared-count">0</strong><small>Saved in this browser preview</small><div class="metric-footnote"><span class="local-indicator"></span> Local preview data</div></article>
-   </div>
-  </section>
-  <section id="studios" class="catalog-section">
-   <div class="section-head"><div><div class="section-overline">FIND THE RIGHT EXPERTISE</div><h2>Explore specialist studios</h2><p>Focused teams for every kind of work.</p></div><label class="catalog-search">⌕ <input id="search" placeholder="Search agents or studios..." type="search"></label></div>
-   <div class="studio-grid" id="studio-grid"></div>
-  </section>
-  <section id="agents-section" class="agents-section">
-   <div class="section-head"><div><div class="section-overline">YOUR SPECIALIST DIRECTORY</div><h2 id="agents-title">Popular agents</h2><p id="agents-subtitle">Choose a specialist to open its dedicated workspace.</p></div><button class="link-btn" id="view-all">View all agents <span>→</span></button></div>
-   <div class="agent-grid" id="agent-grid"></div>
-  </section>
-  <section class="workflow-panel"><div class="workflow-copy"><div class="section-overline">A MORE THOUGHTFUL WORKFLOW</div><h2>From first brief<br>to <span>clear next step.</span></h2><p>Start with a focused brief, choose the right specialist and keep the work organized as your ideas take shape.</p></div><div class="workflow-steps"><article><i>01</i><div><strong>Choose your specialist</strong><small>Explore focused skills across six studios.</small></div><span>↗</span></article><article><i>02</i><div><strong>Shape the project brief</strong><small>Add context, goals and reference files.</small></div><span>↗</span></article><article><i>03</i><div><strong>Keep everything together</strong><small>Find your prepared briefs in Projects & tasks.</small></div><span>↗</span></article></div></section>
-  <footer><a class="brand footer-brand" href="#"><img src="mark.svg" alt=""><span>agent<span>studio</span></span></a><span>Specialized AI workspaces. One place.</span><small>© 2026 Agent Studio</small></footer>
- </div>
+  <header class="topbar">
+    <div class="topbar-left"><button class="mobile-menu" id="mobile-menu" aria-label="Open navigation">☰</button><div class="breadcrumb"><span>Workspace</span><i>/</i><strong id="crumb">Overview</strong></div></div>
+    <div class="topbar-right">
+      <label class="global-search"><span>⌕</span><input id="top-search" type="search" placeholder="Search anything..." aria-label="Search workspace"><kbd>⌘ K</kbd></label>
+      <button class="icon-button" id="activity-button" aria-label="Notifications">♧<i></i></button>
+      <button class="runtime-pill" id="runtime-button"><span class="runtime-dot"></span><span>Runtime offline</span><b>↗</b></button>
+      <span class="top-avatar">U</span>
+    </div>
+  </header>
+  <div class="page-wrap">
+    <section id="overview-view">
+      <div class="page-intro">
+        <div><div class="eyebrow"><span class="eyebrow-line"></span> YOUR CREATIVE OPERATING SPACE</div><h1 id="page-title">Your workspace<span class="title-period">.</span></h1><p id="page-description">A considered space to turn ambitious ideas into meaningful work.</p></div>
+        <button class="button button-dark" id="hero-new-project"><span>＋</span> Start a project <b>↗</b></button>
+      </div>
+      <section class="hero-panel">
+        <div class="hero-copy"><div class="hero-kicker"><span class="hero-kicker-dot"></span> THE RIGHT EXPERTISE CHANGES EVERYTHING</div><h2>Big ideas deserve<br><em>specialist thinking.</em></h2><p>Meet a focused team for every kind of work. Find your specialist, shape your brief and keep your projects in one thoughtful workspace.</p><div class="hero-actions"><button class="button button-lime" id="browse">Explore the studios <span>↗</span></button><span class="hero-note">Six studios. One place to begin.</span></div></div>
+        <div class="hero-art" aria-hidden="true"><div class="art-grid"></div><div class="art-halo halo-a"></div><div class="art-halo halo-b"></div><div class="art-orbit orbit-a"></div><div class="art-orbit orbit-b"></div><div class="art-core"><img src="mark.svg" alt=""></div><div class="art-chip chip-a"><i>✳</i> CREATE</div><div class="art-chip chip-b"><i>⌘</i> BUILD</div><div class="art-chip chip-c"><i>↗</i> GROW</div><div class="art-spark spark-a">✳</div><div class="art-spark spark-b">·</div></div>
+        <div class="hero-bottom"><span>DESIGNED FOR FOCUS</span><span>BUILT AROUND YOUR WORK <b>↗</b></span></div>
+      </section>
+      <section class="overview-strip">
+        <div class="overview-heading"><div><span class="section-kicker">A CLEAR VIEW OF YOUR WORKSPACE</span><h2>At a glance</h2></div><span class="overview-caption">YOUR PERSONAL WORKBENCH</span></div>
+        <div class="stats-row">
+          <article class="stat-card"><div class="stat-label"><span class="stat-symbol symbol-lime">✳</span> Specialist studios</div><div class="stat-value" id="studio-count">06</div><div class="stat-foot">Distinct areas of expertise</div><div class="stat-accent accent-lime"></div></article>
+          <article class="stat-card"><div class="stat-label"><span class="stat-symbol symbol-violet">⌘</span> Available agents</div><div class="stat-value" id="agent-count">50</div><div class="stat-foot">Focused specialist skill sets</div><div class="stat-accent accent-violet"></div></article>
+          <article class="stat-card"><div class="stat-label"><span class="stat-symbol symbol-blue">▤</span> Prepared briefs</div><div class="stat-value" id="prepared-count">0</div><div class="stat-foot"><span class="tiny-local-dot"></span> Saved in this browser</div><div class="stat-accent accent-blue"></div></article>
+        </div>
+      </section>
+      <section class="studios-section" id="studios">
+        <div class="section-heading"><div><span class="section-kicker">PICK YOUR DISCIPLINE</span><h2>Explore the studios<span class="title-period">.</span></h2><p>Purpose-built spaces for the work you want to do.</p></div><span class="catalog-total" id="catalog-total">50 specialists <b>↗</b></span></div>
+        <div class="studio-grid" id="studio-grid"></div>
+      </section>
+      <section class="agents-section" id="agents-section">
+        <div class="section-heading agent-heading"><div><span class="section-kicker">YOUR SPECIALIST DIRECTORY</span><h2 id="agents-title">Popular specialists<span class="title-period">.</span></h2><p id="agents-subtitle">A focused set of skills, ready to shape your next project.</p></div><div class="agent-heading-actions"><span class="agent-count" id="agent-count-label">50 specialists</span><button class="text-button" id="view-all" onclick="document.querySelector('#search').value='';document.querySelector('#agents-title').textContent='Popular specialists';">View all <b>↗</b></button></div></div>
+        <label class="directory-search"><span>⌕</span><input id="search" type="search" placeholder="Find a specialist by name, skill or outcome..."><kbd>SEARCH</kbd></label>
+        <div class="agent-grid" id="agent-grid"></div>
+      </section>
+      <section class="closing-panel"><div><span class="section-kicker">A BETTER WAY TO GET INTO THE WORK</span><h2>Start with a brief.<br><em>Find your momentum.</em></h2><p>Your ideas, files and decisions stay close. Agent execution will connect through your own Local Runtime when it is ready.</p></div><div class="closing-side"><div class="closing-check">◈</div><strong>Local-first by design</strong><span>Your device. Your data. Your choice.</span><button id="create-project" class="button button-lime">Shape a new idea <b>↗</b></button></div></section>
+    </section>
+    <section id="projects-view" hidden>
+      <div class="page-intro projects-intro"><div><div class="eyebrow"><span class="eyebrow-line"></span> YOUR WORK, IN ONE PLACE</div><h1 id="projects-title">Your projects<span class="title-period">.</span></h1><p id="projects-description">A home for the ideas and briefs you have prepared.</p></div><button class="button button-dark" id="back-to-overview">＋ New brief <b>↗</b></button></div>
+      <div class="projects-toolbar"><div><span class="section-kicker">PROJECT LIBRARY</span><h2>Prepared work</h2></div><span class="local-only-label"><i></i> Stored in this browser</span></div><div id="project-list" class="project-list"></div>
+    </section>
+    <footer class="page-footer"><a class="footer-brand" href="#"><img src="mark.svg" alt=""> agent<span>studio</span></a><span>Specialist thinking. Your own execution.</span><span>© 2026 Agent Studio</span></footer>
+  </div>
 </main>
 </div>
-<div class="backdrop" id="modal" aria-hidden="true"><section class="workspace-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
- <button class="close" id="close" aria-label="Close">×</button>
- <div class="modal-topline"><span class="modal-context">SPECIALIST WORKSPACE</span><span class="modal-preview">PREVIEW</span></div>
- <div class="modal-head"><div class="agent-emblem" id="emblem">✦</div><div><label class="eyebrow" id="modal-studio">VIDEO & FILM STUDIO</label><h2 id="modal-title">Cinematic Video Editor</h2><p id="modal-desc"></p></div></div>
- <div class="workspace-body"><div class="brief-column"><label class="field-label">START WITH A TASK</label><div class="task-chips" id="task-chips"></div><label class="field-label" for="brief">PROJECT BRIEF</label><textarea id="brief" rows="5" placeholder="Describe your goal, audience, style, references and the result you need..."></textarea>
-  <label class="upload"><b>↑</b><span><strong>Attach project files</strong><small>Choose files from your device. Files stay in this browser preview.</small><em id="file-name">Browse files</em></span><input id="files" type="file" multiple></label>
-  <button class="primary run" id="prepare">Save project brief <span>→</span></button><small class="execution-note">Live agent execution is not connected yet. This saves a local brief only.</small>
- </div><aside class="capability-panel"><label class="field-label">SPECIALIST CAPABILITIES</label><ul id="capabilities"></ul><div class="notice"><span>◈</span><p>Your files remain in this browser preview. No agent execution or external upload happens here.</p></div></aside></div>
- <div class="confirmation" id="confirmation" hidden>✓ <span><b>Brief saved to Projects & tasks</b><small>Your prepared brief is stored in this browser preview.</small></span></div>
-</section></div><div class="toast" id="toast"></div>
+<div class="modal-backdrop" id="modal" aria-hidden="true"><section class="workspace-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <button class="modal-close" id="close" aria-label="Close">×</button><div class="modal-top"><span class="modal-eyebrow">SPECIALIST WORKSPACE</span><span class="preview-tag">PREVIEW MODE</span></div>
+  <div class="modal-heading"><div class="agent-emblem" id="emblem">✳</div><div><span id="modal-studio" class="modal-studio">DESIGN STUDIO</span><h2 id="modal-title">Your specialist</h2><p id="modal-desc"></p></div></div>
+  <div class="modal-content"><div class="brief-form"><label class="form-label">START WITH A TASK</label><div class="task-chips" id="task-chips"></div><label class="form-label" for="brief">PROJECT BRIEF</label><textarea id="brief" rows="6" placeholder="What are you trying to achieve? Add context, audience, constraints and what a good result looks like..."></textarea><label class="file-picker"><span class="file-icon">＋</span><span><strong>Attach reference files</strong><small>Files are selected locally and are not uploaded in this preview.</small><em id="file-name">Choose files</em></span><input id="files" type="file" multiple></label><button class="button button-dark save-brief" id="prepare">Save project brief <b>↗</b></button><p class="execution-disclaimer">This preview saves your brief locally. Live agent execution is not connected.</p></div><aside class="capability-card"><span class="form-label">SPECIALIST CAPABILITIES</span><ul id="capabilities"></ul><div class="capability-note"><span>◈</span><p>Your selected files remain on your device. Nothing is sent to an external service from this preview.</p></div></aside></div>
+  <div class="confirmation" id="confirmation" hidden><span>✓</span><div><strong>Brief saved to your projects</strong><small>Your prepared brief is stored in this browser.</small></div></div>
+</section></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body></html>
