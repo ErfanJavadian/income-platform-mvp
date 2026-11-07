@@ -67,8 +67,8 @@ const totalAgents = studios.reduce((n,s)=>n+s.agents.length,0);
 function updateCounts(){
   $("#project-count").textContent = projects.length;
   $("#prepared-count").textContent = projects.length;
-  $("#project-count-mobile").textContent = projects.length;
-  $("#hero-project-count").textContent = projects.length;
+  const mobileCount=$("#project-count-mobile");if(mobileCount)mobileCount.textContent=projects.length;
+  const heroCount=$("#hero-project-count");if(heroCount)heroCount.textContent=projects.length;
   localStorage.setItem("agentStudioProjects", JSON.stringify(projects));
 }
 function renderStudioRail(){
@@ -165,6 +165,8 @@ function init(){
   $("#create-project").onclick=()=>{openAgent(studioMeta("business"),2);};
   $("#hero-new-project").onclick=()=>{openAgent(studioMeta("business"),2);};
   $("#project-nav-shortcut").onclick=()=>showView("projects");
+  $("#view-all").onclick=()=>{activeStudio="all";$("#search").value="";renderStudioRail();renderAgents();};
+  $("#back-to-overview").onclick=()=>openAgent(studioMeta("business"),2);
   $("#back-to-overview").onclick=()=>showView("overview");
   document.addEventListener("click",e=>{if(innerWidth<900&&!e.target.closest("#sidebar")&&!e.target.closest("#mobile-menu"))$("#sidebar").classList.remove("is-open");});
 }
