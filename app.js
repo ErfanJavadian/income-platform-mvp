@@ -55,22 +55,117 @@ const studios=[
 ["Audio Restoration Agent","Diagnose noise and create audio restoration workflows.","◉",["Noise diagnosis","Restoration","Quality checks"],["Noise cleanup plan","Audio diagnosis","Restoration brief"]],
 ["Music Composer","Create musical concepts, themes and composition directions.","♬",["Themes","Mood & tempo","Composition"],["Theme concept","Background score","Music direction"]],
 ["Dubbing Agent","Prepare dubbing scripts, timing and localization workflows.","◫",["Dialogue adaptation","Timing","Localization"],["Dub script","Scene timing","Localization brief"]]]}];
-const $=s=>document.querySelector(s);let active="all",current=null,projects=JSON.parse(localStorage.getItem("agentStudioProjects")||"[]");
-function renderStudios(){ $("#studio-grid").innerHTML=studios.map(s=>`<button class="studio-card" data-studio="${s.id}" style="--accent:${s.accent};--tint:${s.tint};--glow:${s.glow}"><div class="studio-top"><span class="studio-symbol">${s.symbol}</span><span class="studio-arrow">↗</span></div><h3>${s.name}</h3><p>${s.desc}</p><span class="studio-meta">${s.agents.length} specialist agents · Explore studio</span></button>`).join("");document.querySelectorAll(".studio-card").forEach(b=>b.onclick=()=>showStudio(b.dataset.studio))}
-function renderAgents(){let list=studios.flatMap(s=>s.agents.map((a,i)=>({a,s,i})));if(active!=="all")list=list.filter(x=>x.s.id===active);let q=$("#search").value.toLowerCase().trim();if(q)list=list.filter(x=>(x.a[0]+" "+x.a[1]+" "+x.s.name+" "+x.a[3].join(" ")).toLowerCase().includes(q));$("#agents-title").textContent=active==="all"?"Popular agents":studios.find(s=>s.id===active).short+" specialists";$("#agents-subtitle").textContent=q?"Matching specialists for “"+q+"”.":"Choose a specialist to open its dedicated workspace.";$("#agent-grid").innerHTML=list.slice(0,15).map(x=>`<article class="agent-card" style="--accent:${x.s.accent};--tint:${x.s.tint}"><div class="agent-head"><span class="agent-icon">${x.a[2]}</span><div><h3>${x.a[0]}</h3><div class="agent-studio">${x.s.short} Studio</div></div></div><p>${x.a[1]}</p><div class="tags">${x.a[3].slice(0,3).map(t=>`<span class="tag">${t}</span>`).join("")}</div><div class="agent-foot"><small>Specialist workspace</small><button data-agent="${x.s.id}:${x.i}">Open workspace ↗</button></div></article>`).join("")||"<p>No matching agents. Try another search.</p>";document.querySelectorAll("[data-agent]").forEach(b=>b.onclick=()=>{let [id,i]=b.dataset.agent.split(":");openAgent(studios.find(s=>s.id===id),+i)})}
-function showStudio(id){active=id;document.querySelectorAll(".studio-nav-item").forEach(b=>b.classList.toggle("active",b.dataset.studio===id));renderAgents();$("#agents-section").scrollIntoView({behavior:"smooth"});$("#crumb").textContent=studios.find(s=>s.id===id).short+" Studio"}
-function openAgent(s,i){current={s,a:s.agents[i]};let a=current.a;$("#emblem").textContent=a[2];$("#emblem").style.background=s.tint;$("#emblem").style.color=s.accent;$("#modal-studio").textContent=s.name.toUpperCase();$("#modal-title").textContent=a[0];$("#modal-desc").textContent=a[1];$("#task-chips").innerHTML=a[4].map(t=>`<button class="task-chip">${t}</button>`).join("");document.querySelectorAll(".task-chip").forEach(b=>b.onclick=()=>{b.classList.toggle("selected");if(!$("#brief").value)$("#brief").value="I need help with: "+b.textContent+".\n\nGoal:\nAudience:\nStyle or references:\nDeliverable:"});$("#capabilities").innerHTML=a[3].map(c=>"<li>"+c+"</li>").join("");$("#brief").value="";$("#files").value="";$("#file-name").textContent="Browse files";$("#confirmation").hidden=true;$("#modal").classList.add("open");$("#modal").setAttribute("aria-hidden","false");document.body.style.overflow="hidden"}
-function closeModal(){$("#modal").classList.remove("open");$("#modal").setAttribute("aria-hidden","true");document.body.style.overflow=""}
-function updateProjects(){localStorage.setItem("agentStudioProjects",JSON.stringify(projects));$("#project-count").textContent=projects.length;const metric=$("#prepared-count");if(metric)metric.textContent=projects.length}
-function toast(t){$("#toast").textContent=t;$("#toast").classList.add("show");setTimeout(()=>$("#toast").classList.remove("show"),2400)}
-$("#files").onchange=e=>$("#file-name").textContent=e.target.files.length?[...e.target.files].map(f=>f.name).join(", "):"Browse files";
-$("#prepare").onclick=()=>{let brief=$("#brief").value.trim();if(!brief){toast("Add a short project brief first.");$("#brief").focus();return}projects.unshift({id:Date.now(),agent:current.a[0],studio:current.s.short,brief,date:new Date().toLocaleDateString()});updateProjects();$("#confirmation").hidden=false;toast("Task brief saved in this browser preview.")};
-$("#close").onclick=closeModal;$("#modal").onclick=e=>{if(e.target===$("#modal"))closeModal()};document.onkeydown=e=>{if(e.key==="Escape")closeModal()};
-$("#search").oninput=()=>{active="all";renderAgents()};
-const topSearch=$("#top-search");if(topSearch)topSearch.oninput=()=>{$("#search").value=topSearch.value;active="all";renderAgents();if(topSearch.value)$("#agents-section").scrollIntoView({behavior:"smooth",block:"start"})};
-$("#search").oninput=()=>{active="all";renderAgents();if(topSearch)topSearch.value=$("#search").value};
-document.querySelectorAll(".studio-nav-item").forEach(b=>b.onclick=()=>showStudio(b.dataset.studio));
-function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav").forEach(n=>n.classList.remove("active"));b.classList.add("active");if(b.dataset.view==="projects"){$("#crumb").textContent="My projects";$("#agents-title").textContent="Your prepared tasks";$("#agents-subtitle").textContent="Briefs saved in this browser preview.";$("#agent-grid").innerHTML=projects.length?projects.map(p=>`<article class="agent-card"><div class="agent-head"><span class="agent-icon">▤</span><div><h3>${escapeHTML(p.agent)}</h3><div class="agent-studio">${escapeHTML(p.studio)} · ${p.date}</div></div></div><p>${escapeHTML(p.brief)}</p><div class="agent-foot"><small>Brief saved locally</small><span class="tag">Prepared</span></div></article>`).join(""):"<p>No prepared tasks yet. Open an agent workspace to start.</p>";$("#agents-section").scrollIntoView({behavior:"smooth"})}else if(b.dataset.view==="teams")toast("Multi-agent collaboration is planned for a later release.");else{$("#crumb").textContent="Discover agents";active="all";renderAgents();$("#hero").scrollIntoView({behavior:"smooth"})}});
-$("#browse").onclick=()=>$("#studios").scrollIntoView({behavior:"smooth"});const explore=$("#explore");if(explore)explore.onclick=()=>$("#studios").scrollIntoView({behavior:"smooth"});$("#view-all").onclick=()=>{active="all";$("#search").value="";renderAgents()};$("#mobile-menu").onclick=()=>$("#sidebar").classList.toggle("open");document.addEventListener("click",e=>{if(innerWidth<740&&!e.target.closest("#sidebar")&&!e.target.closest("#mobile-menu"))$("#sidebar").classList.remove("open")});
-renderStudios();renderAgents();updateProjects();
+
+const $ = (s, root=document) => root.querySelector(s);
+const $$ = (s, root=document) => [...root.querySelectorAll(s)];
+let activeStudio = "all", currentAgent = null;
+let projects = JSON.parse(localStorage.getItem("agentStudioProjects") || "[]");
+const studioMeta = id => studios.find(s => s.id === id);
+const escapeHTML = value => String(value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const totalAgents = studios.reduce((n,s)=>n+s.agents.length,0);
+
+function updateCounts(){
+  $("#project-count").textContent = projects.length;
+  $("#prepared-count").textContent = projects.length;
+  $("#project-count-mobile").textContent = projects.length;
+  $("#hero-project-count").textContent = projects.length;
+  localStorage.setItem("agentStudioProjects", JSON.stringify(projects));
+}
+function renderStudioRail(){
+  $("#studio-nav").innerHTML = studios.map(s => `
+    <button class="rail-link studio-link ${activeStudio===s.id?"is-active":""}" data-studio="${s.id}">
+      <span class="rail-dot" style="--dot:${s.accent}"></span><span>${s.short}</span><small>${s.agents.length}</small>
+    </button>`).join("");
+  $$("[data-studio]").forEach(b=>b.addEventListener("click",()=>selectStudio(b.dataset.studio)));
+}
+function renderStudios(){
+  $("#studio-grid").innerHTML = studios.map((s,i)=>`
+    <button class="studio-card studio-${s.id}" data-studio-card="${s.id}" style="--accent:${s.accent};--wash:${s.tint}">
+      <div class="studio-card-top"><span class="studio-icon">${s.symbol}</span><span class="studio-index">0${i+1}</span></div>
+      <h3>${s.short}</h3><p>${s.desc}</p>
+      <div class="studio-card-bottom"><span>${s.agents.length} specialists</span><span class="card-arrow">↗</span></div>
+    </button>`).join("");
+  $$("[data-studio-card]").forEach(b=>b.addEventListener("click",()=>selectStudio(b.dataset.studioCard,true)));
+}
+function renderAgents(){
+  let list=studios.flatMap(s=>s.agents.map((a,i)=>({a,s,i})));
+  if(activeStudio!=="all") list=list.filter(x=>x.s.id===activeStudio);
+  const q=$("#search").value.trim().toLowerCase();
+  if(q) list=list.filter(x=>(x.a[0]+" "+x.a[1]+" "+x.s.name+" "+x.a[3].join(" ")).toLowerCase().includes(q));
+  $("#agent-count-label").textContent=list.length+" specialists";
+  $("#agents-title").textContent=activeStudio==="all"?"Popular specialists":studioMeta(activeStudio).short+" specialists";
+  $("#agents-subtitle").textContent=q?'Results matching "'+escapeHTML(q)+'"':"A focused set of skills, ready to shape your next project.";
+  $("#agent-grid").innerHTML=list.slice(0,12).map(({a,s,i})=>`
+    <article class="agent-card" style="--accent:${s.accent};--wash:${s.tint}">
+      <div class="agent-card-head"><span class="agent-symbol">${a[2]}</span><span class="agent-category">${s.short}</span></div>
+      <h3>${a[0]}</h3><p>${a[1]}</p>
+      <div class="agent-tags">${a[3].slice(0,2).map(t=>'<span>'+escapeHTML(t)+'</span>').join("")}</div>
+      <button class="agent-open" data-agent="${s.id}:${i}">Open workspace <span>↗</span></button>
+    </article>`).join("") || '<div class="empty-state"><span>⌕</span><h3>No specialists found</h3><p>Try another keyword or clear your search.</p><button class="text-button" id="clear-search">Clear search</button></div>';
+  $$("[data-agent]").forEach(b=>b.addEventListener("click",()=>{const [id,i]=b.dataset.agent.split(":");openAgent(studioMeta(id),Number(i));}));
+  const clear=$("#clear-search");if(clear)clear.onclick=()=>{$("#search").value="";renderAgents();};
+}
+function selectStudio(id,scroll=false){
+  activeStudio=id;renderStudioRail();renderAgents();
+  $("#crumb").textContent=id==="all"?"Overview":studioMeta(id).short+" Studio";
+  if(scroll)$("#agents-section").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function renderProjects(){
+  const host=$("#project-list");
+  if(!projects.length){host.innerHTML='<div class="empty-projects"><div class="empty-illustration">↗</div><h3>Your project space is clear.</h3><p>Open a specialist, write a brief and save it here. Your briefs stay in this browser preview.</p><button class="button button-dark" id="discover-from-empty">Explore specialists <span>↗</span></button></div>';const b=$("#discover-from-empty");if(b)b.onclick=()=>showView("overview");return;}
+  host.innerHTML=projects.map(p=>`
+    <article class="project-row"><div class="project-file">▤</div><div class="project-info"><strong>${escapeHTML(p.title||p.agent)}</strong><span>${escapeHTML(p.studio)} · ${escapeHTML(p.date)}</span><p>${escapeHTML(p.brief)}</p></div><span class="project-state">Brief saved</span></article>`).join("");
+}
+function showView(view){
+  $$(".rail-link[data-view]").forEach(b=>b.classList.toggle("is-active",b.dataset.view===view));
+  $("#overview-view").hidden=view!=="overview";$("#projects-view").hidden=view!=="projects";
+  $("#crumb").textContent=view==="projects"?"Projects & tasks":"Overview";
+  if(view==="projects"){renderProjects();$("#page-title").textContent="Your projects";$("#page-description").textContent="A home for the ideas and briefs you have prepared.";}
+  else{$("#page-title").textContent="Your workspace";$("#page-description").textContent="A considered space to turn ambitious ideas into meaningful work.";}
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function openAgent(s,i){
+  const a=s.agents[i];currentAgent={s,a};
+  $("#modal-studio").textContent=s.short.toUpperCase()+" STUDIO";
+  $("#modal-title").textContent=a[0];$("#modal-desc").textContent=a[1];
+  $("#emblem").textContent=a[2];$("#emblem").style.setProperty("--accent",s.accent);$("#emblem").style.setProperty("--wash",s.tint);
+  $("#task-chips").innerHTML=a[4].map(t=>'<button class="task-chip">'+escapeHTML(t)+'</button>').join("");
+  $$(".task-chip").forEach(b=>b.onclick=()=>{b.classList.toggle("selected");if(!$("#brief").value.trim())$("#brief").value="I need help with: "+b.textContent+".\n\nGoal:\nAudience:\nReferences or constraints:\nExpected deliverable:";});
+  $("#capabilities").innerHTML=a[3].map(c=>'<li>'+escapeHTML(c)+'</li>').join("");
+  $("#brief").value="";$("#files").value="";$("#file-name").textContent="Choose files";$("#confirmation").hidden=true;
+  $("#modal").classList.add("open");$("#modal").setAttribute("aria-hidden","false");document.body.classList.add("modal-open");$("#brief").focus();
+}
+function closeModal(){$("#modal").classList.remove("open");$("#modal").setAttribute("aria-hidden","true");document.body.classList.remove("modal-open");}
+function notify(message){const t=$("#toast");t.textContent=message;t.classList.add("show");clearTimeout(notify.timer);notify.timer=setTimeout(()=>t.classList.remove("show"),2600);}
+function saveBrief(){
+  const brief=$("#brief").value.trim();if(!brief){notify("Add a project brief before saving.");$("#brief").focus();return;}
+  const files=[...$("#files").files].map(f=>f.name);
+  projects.unshift({id:Date.now(),agent:currentAgent.a[0],title:currentAgent.a[0]+" — "+(brief.split("\n")[0].slice(0,52)),studio:currentAgent.s.short,brief,date:new Date().toLocaleDateString(),files});
+  updateCounts();renderProjects();$("#confirmation").hidden=false;notify("Your brief has been saved in this browser.");
+}
+function init(){
+  $("#studio-count").textContent=String(studios.length).padStart(2,"0");
+  $("#agent-count").textContent=String(totalAgents).padStart(2,"0");
+  $("#catalog-total").textContent=totalAgents+" specialists";
+  renderStudioRail();renderStudios();renderAgents();updateCounts();renderProjects();
+  $$("[data-view]").forEach(b=>b.onclick=()=>showView(b.dataset.view));
+  $("#search").oninput=()=>{activeStudio="all";renderStudioRail();renderAgents();};
+  $("#top-search").oninput=e=>{$("#search").value=e.target.value;activeStudio="all";renderStudioRail();renderAgents();};
+  $("#browse").onclick=()=>$("#studios").scrollIntoView({behavior:"smooth"});
+  $("#view-all").onclick=()=>{selectStudio("all");$("#search").value="";renderAgents();};
+  $("#close").onclick=closeModal;$("#modal").onclick=e=>{if(e.target===$("#modal"))closeModal();};
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$("#top-search").focus();}});
+  $("#prepare").onclick=saveBrief;
+  $("#files").onchange=e=>$("#file-name").textContent=e.target.files.length?[...e.target.files].map(f=>f.name).join(", "):"Choose files";
+  $("#mobile-menu").onclick=()=>$("#sidebar").classList.toggle("is-open");
+  $("#sidebar-close").onclick=()=>$("#sidebar").classList.remove("is-open");
+  $("#workspace-switcher").onclick=()=>notify("Personal workspace");
+  $("#activity-button").onclick=()=>notify("You're all caught up.");
+  $("#runtime-button").onclick=()=>notify("Local Runtime is not connected in this preview.");
+  $("#create-project").onclick=()=>{openAgent(studioMeta("business"),2);};
+  $("#hero-new-project").onclick=()=>{openAgent(studioMeta("business"),2);};
+  $("#project-nav-shortcut").onclick=()=>showView("projects");
+  $("#back-to-overview").onclick=()=>showView("overview");
+  document.addEventListener("click",e=>{if(innerWidth<900&&!e.target.closest("#sidebar")&&!e.target.closest("#mobile-menu"))$("#sidebar").classList.remove("is-open");});
+}
+init();
